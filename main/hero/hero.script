@@ -1,0 +1,150 @@
+go.property("hp", 200)
+go.property("speed", 100)
+go.property("damage", 35)
+go.property("bullet_speed", 500)
+go.property("bullet_url", msg.url())
+go.property("aim_id", hash(""))
+go.property("vampirism", 0)
+
+local Animate = require "main.lib.animation"
+local Position = require "main.lib.position"
+debugdraw = require "debug-draw.debug-draw"
+
+local camera = require "orthographic.camera"
+
+function init(self)
+    msg.post(".", "acquire_input_focus")
+    self.direction = vmath.vector3(0, 0, 0)
+    self.prev_direction = vmath.vector3(0, -1, 0)
+    self.current_animation = nil
+    self.correction = vmath.vector3()
+    self.attacking = false
+    self.locked_anim = false
+    self.max_hp = self.hp
+    self.aim = vmath.vector3()
+    self.tinting = false
+end
+
+function final()
+    msg.post(".", "release_input_focus")
+end
+
+--@param hp number
+local function set_hp(self, hp)
+    self.hp = hp
+    msg.post("/gui#ingame", M.CHANGE_HP_BAR, { hp = hp, max_hp = self.max_hp })
+    print("HP: ", hp)
+end
+
+local function take_damage(self, hp)
+    local hp = self.hp - hp
+    set_hp(self, hp)
+    -- msg.post("/ui", "change_hero_hp", { hp = self.hp, max_hp = self.max_hp })
+    if not self.tinting then
+        self.tinting = true
+        -- go.animate(C.SPRITE, "tint", go.PLAYBACK_ONCE_PINGPONG,
+        --     vmath.vector4(1, 0, 0, 1), go.EASING_LINEAR, 0.2, 0, function() self.tinting = false end);
+    end
+    if self.hp <= 0 then
+        msg.post("/main#main", M.GAME_OVER)
+    end
+end
+
+
+local function enemy_damage(self, hp)
+    if self.vampirism <= 0 then
+        return
+    end
+    local vampirism = (hp / 100) * self.vampirism
+    local hp = self.hp + vampirism
+    if hp > self.max_hp then
+        hp = self.max_hp
+    end
+    set_hp(self, hp)
+end
+
+-- function fixed_update(self, dt)
+--     local pos = go.get_position()
+--     debugdraw.box(pos.x, pos.y, 64, 64)
+-- end
+
+function update(self, dt)
+    local is_moved = vmath.length_sqr(self.direction) > 0
+    local anim;
+
+    -- aim
+    -- local cursor_pos = camera.screen_to_world(nil, self.aim)
+    -- self.cursor_pos = vmath.lerp(0.5, go.get_position(), cursor_pos)
+    -- cursor original pos for aim
+    -- cursor_pos.z = C.OBECTS_Z_INDEX + 0.1
+    -- go.set_position(cursor_pos, self.aim_id)
+    local pos = go.get_position()
+    if is_moved then
+        local new_pos = pos + vmath.normalize(self.direction) * self.speed * dt
+        Position.set_iso_position(new_pos, C.OBECTS_Z_INDEX)
+        self.prev_direction = self.direction
+    end
+    anim = ""
+    -- anim = Animate.get_anim_name_by_direction("hero", vmath.normalize(self.cursor_pos - pos))
+    if is_moved then
+        anim = hash(anim)
+    else
+        anim = hash(anim)
+        -- anim = hash("idle-" .. anim)
+    end
+    -- Animate.play_animation(self, C.SPRITE, anim)
+
+    self.direction = vmath.vector3()
+    self.correction = vmath.vector3()
+    self.attacking = false
+end
+
+-- local function spawn_bullet(self)
+--     local start_pos = go.get_world_position()
+--     local direction = self.cursor_pos - start_pos
+--     -- local offset = vmath.normalize(direction)
+--     -- offset.x = offset.x * 10
+--     -- offset.x = offset.y * 50
+--     -- start_pos = start_pos + offset
+--     local angle = -math.atan2(direction.x, direction.y)
+--     local quat = vmath.quat_rotation_z(angle)
+--     local pos = start_pos + vmath.rotate(quat, C.BULLET_OFFSET) * 10
+--     pos.z = C.OBECTS_Z_INDEX
+--     factory.create(self.bullet_url, pos, quat,
+--         { damage = self.damage, speed = self.bullet_speed, owner_id = go.get_id() })
+-- end
+
+---@param self any
+---@param action_id hash
+---@param action {pressed: bool, x: number, y: number}
+function on_input(self, action_id, action)
+    self.aim.x = action.x
+    self.aim.y = action.y
+    if action.pressed then
+        -- actions only if pressed
+        if action_id == C.FIRE
+        then
+            -- spawn_bullet(self)
+            self.attacking = true
+        end
+        -- movement
+    elseif action_id == C.LEFT then
+        self.direction.x = -1
+    elseif action_id == C.RIGHT then
+        self.direction.x = 1
+    elseif action_id == C.UP then
+        self.direction.y = 1
+    elseif action_id == C.DOWN then
+        self.direction.y = -1
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == M.CONTACT_POINT_RESPONSE then
+        Position.correct_position(self, message)
+    elseif message_id == M.MAKE_DAMAGE then
+        take_damage(self, message.hp)
+    elseif message_id == M.ENEMY_DAMAGE then
+        enemy_damage(self, message.hp)
+    end
+end

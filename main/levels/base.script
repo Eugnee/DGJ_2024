@@ -1,0 +1,24 @@
+local MAP_LENGTH = 1024
+local debugdraw = require "debug-draw.debug-draw"
+
+function init(self)
+    math.randomseed(os.time())
+    local hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil)
+    msg.post("camera", "follow", {
+        target = hero_id,
+        lerp = 0.7,
+        horizontal = true,
+        vertical = true,
+        immediate = true
+    })
+    msg.post(
+        "camera",
+        "bounds",
+        { left = -MAP_LENGTH, right = MAP_LENGTH, bottom = -MAP_LENGTH, top = MAP_LENGTH }
+    )
+end
+
+function update()
+    debugdraw.line(-MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH, MAP_LENGTH)
+    debugdraw.line(MAP_LENGTH, -MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH)
+end

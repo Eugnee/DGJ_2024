@@ -1,0 +1,32 @@
+go.property("speed", 500)
+go.property("damage", 30)
+go.property("owner_id", hash(""))
+
+function init(self)
+	self.counter = 0
+end
+
+function update(self, dt)
+	local pos = go.get_position()
+	local d = vmath.rotate(go.get_rotation(), C.BULLET_ROTATION)
+	pos = pos + d * self.speed * dt
+	if not check_if_in_bounds(pos) then
+		go.delete()
+	end
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == M.CONTACT_POINT_RESPONSE
+	then
+		if self.counter == 0 then
+			msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
+			msg.post(self.owner_id, M.ENEMY_DAMAGE, { hp = self.damage })
+			-- msg.post(C.SPRITE, M.DISABLE)
+		end
+		self.counter = self.counter + 1
+		if self.counter > 5 then
+			go.delete()
+		end
+	end
+end

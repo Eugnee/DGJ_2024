@@ -11,6 +11,7 @@ function init(self)
 	self.current_level = 'main_menu_proxy'
 	load_level(self)
 	msg.post(".", "acquire_input_focus")
+	pprint(msg.url())
 end
 
 function unload_level(self)
