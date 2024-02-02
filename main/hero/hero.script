@@ -1,5 +1,5 @@
 go.property("hp", 200)
-go.property("speed", 200)
+go.property("speed", 300)
 go.property("damage", 35)
 go.property("bullet_speed", 500)
 go.property("bullet_url", msg.url())
@@ -14,8 +14,8 @@ local camera = require "orthographic.camera"
 
 function init(self)
     msg.post(".", "acquire_input_focus")
-    self.direction = vmath.vector3(0, 0, 0)
-    self.prev_direction = nil
+    self.direction = vmath.vector3()
+    self.inertia_direction = vmath.vector3()
     self.current_animation = nil
     self.correction = vmath.vector3()
     self.attacking = false
@@ -25,7 +25,8 @@ function init(self)
     self.tinting = false
     self.is_moved = false
     -- inertia
-    self.max_inertia_count = 100
+    self.speed_counter = 10
+    self.max_inertia_count = self.speed
     self.inertia_count = self.max_inertia_count
 end
 
@@ -77,7 +78,7 @@ local function simle_inertia(self, dt)
     if self.inertia_count < self.max_inertia_count then
         print("inercy movement")
         self.inertia_count = self.inertia_count + 1
-        local speed = self.speed  / self.inertia_count
+        local speed = self.speed / self.inertia_count
         local new_pos = go.get_world_position() + self.inertia_direction * speed * dt
         Position.set_iso_position(new_pos, C.OBECTS_Z_INDEX)
         return
@@ -96,14 +97,21 @@ function update(self, dt)
     -- go.set_position(cursor_pos, self.aim_id)
     local pos = go.get_position()
     if self.is_moved then
-        local new_pos = pos + vmath.normalize(self.direction) * self.speed * dt
+        self.direction = vmath.normalize(self.direction)
+        self.inertia_direction.x = self.direction.x
+        self.inertia_direction.y = self.direction.y
+        local new_pos = pos + self.direction * (self.speed / self.speed_counter) * dt
         Position.set_iso_position(new_pos, C.OBECTS_Z_INDEX)
-        self.prev_direction = self.direction
+        self.speed_counter = self.speed_counter - 1
+        if self.speed_counter < 1 then
+            self.speed_counter = 1
+        end
         self.inertia_count = self.max_inertia_count
+        self.run_inertia = true
     else
-        if self.prev_direction then
-            self.inertia_direction = vmath.normalize(self.prev_direction)
-            self.prev_direction = nil
+        self.speed_counter = 10
+        if self.run_inertia then
+            self.run_inertia = false
             self.inertia_count = 0
         end
     end
@@ -117,11 +125,12 @@ function update(self, dt)
     end
     -- Animate.play_animation(self, C.SPRITE, anim)
 
-    self.direction = vmath.vector3()
+    simle_inertia(self, dt)
+    self.direction.x = 0
+    self.direction.y = 0
     self.correction = vmath.vector3()
     self.attacking = false
     self.is_moved = false;
-    simle_inertia(self, dt)
 end
 
 -- local function spawn_bullet(self)
