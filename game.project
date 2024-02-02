@@ -18,7 +18,7 @@ dependencies#0 = https://github.com/britzl/defold-orthographic/archive/refs/tags
 dependencies#1 = https://github.com/rgrams/debug-draw/archive/master.zip
 
 [physics]
-debug = 1
+debug = 0
 
 [tilemap]
 max_tile_count = 4096

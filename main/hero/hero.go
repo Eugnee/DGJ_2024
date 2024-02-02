@@ -43,7 +43,7 @@ embedded_components {
   "    count: 3\n"
   "  }\n"
   "  data: 16.0\n"
-  "  data: 32.0\n"
+  "  data: 16.0\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"
@@ -55,6 +55,86 @@ embedded_components {
     x: 0.0
     y: 0.0
     z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "sprite"
+  type: "sprite"
+  data: "tile_set: \"/main/hero/hero.tilesource\"\n"
+  "default_animation: \"idle\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "fire_side_right"
+  type: "sprite"
+  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
+  "default_animation: \"side-right\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.1
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "fire_front"
+  type: "sprite"
+  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
+  "default_animation: \"up\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.1
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+}
+embedded_components {
+  id: "fire_side_left"
+  type: "sprite"
+  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
+  "default_animation: \"side-left\"\n"
+  "material: \"/builtins/materials/sprite.material\"\n"
+  "blend_mode: BLEND_MODE_ALPHA\n"
+  ""
+  position {
+    x: 0.0
+    y: 0.0
+    z: 0.1
   }
   rotation {
     x: 0.0

@@ -12,6 +12,9 @@ C.TILE_SIZE = 16
 
 -- ANIMATION
 C.SPRITE = "#sprite"
+C.SPRITE_FIRE_SIDE_RIGHT = "#fire_side_right"
+C.SPRITE_FIRE_SIDE_LEFT = "#fire_side_left"
+C.SPRITE_FIRE_FRONT = "#fire_front"
 
 -- COLLISION GROUPS
 C.HERO = hash("hero")
@@ -38,5 +41,7 @@ C.ITEMS.MOVE_SPEED_INCREASE = hash("move_speed_increase")
 C.ITEMS.RICOCHET_ON = hash("ricochet_on")
 C.ITEMS.VAMPIRISM = hash("vampirism")
 
+-- MOVEMENT
+C.UP_DIR = vmath.vector3(0, 1, 0)
 
 return C
