@@ -17,15 +17,9 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == M.CONTACT_POINT_RESPONSE
+	if message_id == M.TRIGGER_RESPONSE
 	then
-		if self.counter == 0 then
-			msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
-			msg.post(C.SPRITE, M.DISABLE)
-		end
-		self.counter = self.counter + 1
-		if self.counter > 5 then
-			go.delete()
-		end
+		msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
+		go.delete()
 	end
 end

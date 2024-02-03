@@ -1,6 +1,6 @@
-go.property("hp", 200)
+go.property("hp", 500)
 go.property("speed", 300)
-go.property("damage", 35)
+go.property("damage", 50)
 go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
 go.property("angular_velocity", 2)
@@ -17,6 +17,7 @@ local Utils = require "main.lib.utils"
 
 local IDLE_ANIM = hash("idle")
 local ATTACK_ANIM = hash("attack")
+local DAMAGED_ANIM = hash("damaged")
 
 local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 
@@ -29,7 +30,6 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 ---@field locked_anim bool
 ---@field max_hp integer
 ---@field hp integer
----@field tinting bool
 ---@field is_moved bool
 ---@field speed integer
 ---@field acceleration_count integer
@@ -54,7 +54,6 @@ function init(self)
     self.attacking = false
     self.locked_anim = false
     self.max_hp = self.hp
-    self.tinting = false
     self.is_moved = false
     self.acceleration_count = self.speed / 10
     self.inertia_acceleration = self.acceleration_count
@@ -68,7 +67,7 @@ end
 --@param hp number
 local function set_hp(self, hp)
     self.hp = hp
-    msg.post("/gui#ingame", M.CHANGE_HP_BAR, { hp = hp, max_hp = self.max_hp })
+    -- msg.post("/gui#ingame", M.CHANGE_HP_BAR, { hp = hp, max_hp = self.max_hp })
     print("HP: ", hp)
 end
 
@@ -76,13 +75,12 @@ local function take_damage(self, hp)
     local hp = self.hp - hp
     set_hp(self, hp)
     -- msg.post("/ui", "change_hero_hp", { hp = self.hp, max_hp = self.max_hp })
-    if not self.tinting then
-        self.tinting = true
-        -- go.animate(C.SPRITE, "tint", go.PLAYBACK_ONCE_PINGPONG,
-        --     vmath.vector4(1, 0, 0, 1), go.EASING_LINEAR, 0.2, 0, function() self.tinting = false end);
-    end
+
+    Animate.play_animation(self, C.SPRITE, DAMAGED_ANIM, true, function()
+        Animate.play_animation(self, C.SPRITE, IDLE_ANIM)
+    end)
     if self.hp <= 0 then
-        msg.post("/main#main", M.GAME_OVER)
+        -- msg.post("/main#main", M.GAME_OVER)
     end
 end
 
@@ -125,7 +123,7 @@ function update(self, dt)
     if self.dialogue_lock then
         return
     end
-    
+
     if self.is_moved then
         local pos = go.get_position()
         local rotation = go.get_rotation()

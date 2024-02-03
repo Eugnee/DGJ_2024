@@ -20,7 +20,7 @@ animations {
   start_tile: 7
   end_tile: 9
   playback: PLAYBACK_ONCE_FORWARD
-  fps: 10
+  fps: 13
   flip_horizontal: 0
   flip_vertical: 0
 }

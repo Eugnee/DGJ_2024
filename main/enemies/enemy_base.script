@@ -1,4 +1,4 @@
-go.property("hp", 200)
+go.property("hp", 100)
 go.property("hero_id", hash(""))
 go.property("speed", 200)
 go.property("damage", 50)
@@ -14,6 +14,7 @@ local Utils = require "main.lib.utils"
 local RAD_180 = math.pi
 local ATTACK_ANIM = hash("attack")
 local IDLE_ANIM = hash("idle")
+local DEAD_ANIM = hash("dead")
 
 local random = math.random
 
@@ -59,11 +60,9 @@ function get_damage(self, hp)
     if self.hp <= 0 then
         -- msg.post("/main#main", M.INCR_MONSTETS_COUNT)
         self.is_dead = true
-        go.delete()
-        -- animate:play_animation(self, "#sprite", DEATH, true, function()
-        --     go.delete()
-        -- end)
-        return
+        Animate.play_animation(self, C.SPRITE, DEAD_ANIM, true, function()
+            go.delete()
+        end)
     end
 end
 
@@ -84,6 +83,9 @@ end
 ---@param self Enemy
 ---@param dt float
 function update(self, dt)
+    if self.is_dead then
+        return
+    end
     local pos = go.get_position()
     local hero_pos = go.get_position(self.hero_id)
     local target_pos = get_target(self, pos, hero_pos)
@@ -95,6 +97,10 @@ function update(self, dt)
     local nearby_angle = target_angle
     for nearby_id, v in pairs(self.nearby) do
         if v then
+            if not go.exists(nearby_id) then
+                self.nearby[nearby_id] = false
+                goto continue
+            end
             local nearby_pos = go.get_position(nearby_id)
             local distance = Utils.distance_to(pos, nearby_pos)
             local angle = Utils.angle_to(pos, nearby_pos)
@@ -104,6 +110,7 @@ function update(self, dt)
                 nearby_angle = angle
             end
         end
+        ::continue::
     end
 
     -- adjust target angle to avoid nearby enemy
@@ -147,9 +154,10 @@ function on_message(self, message_id, message, sender)
         else
             self.nearby[message.other_id] = false
         end
-    elseif message_id == M.CONTACT_POINT_RESPONSE and (message.other_group == C.HERO or message.other_group == C.ENEMY) then
+    elseif message_id == M.CONTACT_POINT_RESPONSE then
         Position.correct_position(self, message)
     elseif message_id == M.MAKE_DAMAGE then
+        pprint("getting damage")
         get_damage(self, message.hp)
         return
     end
