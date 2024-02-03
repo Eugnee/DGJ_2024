@@ -3,7 +3,7 @@ function init(self)
 	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
 	print("Background 2 created!")
-	self.speed = 20
+	self.speed = 40
 end
 
 function update(self, dt)

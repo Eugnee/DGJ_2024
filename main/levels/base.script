@@ -3,17 +3,32 @@ local MAP_WIDTH = 920
 local BG_Y_RANGE = 561
 debugdraw = require "debug-draw.debug-draw"
 
+-- local debugger = require('debugger.debugger')
+-- debugger.start()
+
 ---@param self any
 local function init_backgrounds(self, camera_id)
-    self.bg_middle = factory.create("factories#background_3_factory")
-    self.bg_front = factory.create("factories#background_3_factory", vmath.vector3(0, BG_Y_RANGE * 2, 0))
-    self.bg_back = factory.create("factories#background_3_factory", vmath.vector3(0, -BG_Y_RANGE * 2, 0))
+    self.bg_middle = { 
+        factory.create("factories#background_factory1"),
+        factory.create("factories#background_factory2"),
+        factory.create("factories#background_factory3") 
+    }
+    self.bg_front = { 
+        factory.create("factories#background_factory1", vmath.vector3(0, BG_Y_RANGE * 2, 0)),
+        factory.create("factories#background_factory2", vmath.vector3(0, BG_Y_RANGE * 2, 0)),
+        factory.create("factories#background_factory3", vmath.vector3(0, BG_Y_RANGE * 2, 0)) 
+    }
+    self.bg_back = { 
+        factory.create("factories#background_factory1", vmath.vector3(0, -BG_Y_RANGE * 2, 0)),
+        factory.create("factories#background_factory2", vmath.vector3(0, -BG_Y_RANGE * 2, 0)),
+        factory.create("factories#background_factory3", vmath.vector3(0, -BG_Y_RANGE * 2, 0))
+    }
 
     local camera_id = go.get_id("camera")
     local hero_id = self.hero_id
 
     self.bg_static = factory.create(
-        "factories#background_0_factory", 
+        "factories#background_factory0", 
         nil, 
         nil, 
         { 
@@ -26,22 +41,22 @@ end
 local function swap_backgrounds(self, dir, bg_level)
     if dir == vmath.vector3(0, 1, 0) then
         print("swap forward background")
-        local bg_back_pos = go.get(self.bg_back, "position")
+        local bg_back_pos = go.get(self.bg_back[bg_level], "position")
         bg_back_pos.y = bg_back_pos.y + BG_Y_RANGE * 6
-        go.set(self.bg_back, "position", bg_back_pos)
-        local bg_back = self.bg_back
-        self.bg_back = self.bg_middle
-        self.bg_middle = self.bg_front
-        self.bg_front = bg_back
+        go.set(self.bg_back[bg_level], "position", bg_back_pos)
+        local bg_back = self.bg_back[bg_level]
+        self.bg_back[bg_level] = self.bg_middle[bg_level]
+        self.bg_middle[bg_level] = self.bg_front[bg_level]
+        self.bg_front[bg_level] = bg_back
     elseif dir == vmath.vector3(0, -1, 0) then
         print("swap backward background")
-        local bg_front_pos = go.get(self.bg_front, "position")
+        local bg_front_pos = go.get(self.bg_front[bg_level], "position")
         bg_front_pos.y = bg_front_pos.y - BG_Y_RANGE * 6
-        go.set(self.bg_front, "position", bg_front_pos)
-        local bg_front = self.bg_front
-        self.bg_front = self.bg_middle
-        self.bg_middle = self.bg_back
-        self.bg_back = bg_front
+        go.set(self.bg_front[bg_level], "position", bg_front_pos)
+        local bg_front = self.bg_front[bg_level]
+        self.bg_front[bg_level] = self.bg_middle[bg_level]
+        self.bg_middle[bg_level] = self.bg_back[bg_level]
+        self.bg_back[bg_level] = bg_front
     end
 end
 
@@ -77,12 +92,13 @@ end
 function update(self)
     -- debugdraw.line(-MAP_HEIGHT, -MAP_HEIGHT, MAP_HEIGHT, MAP_HEIGHT)
     -- debugdraw.line(MAP_HEIGHT, -MAP_HEIGHT, -MAP_HEIGHT, MAP_HEIGHT)
-
-    local bg_middle_pos = go.get(self.bg_middle, "position")
     local player_pos = go.get(self.hero_id, "position")
-    if player_pos.y > bg_middle_pos.y + BG_Y_RANGE then
-        swap_backgrounds(self, vmath.vector3(0, 1, 0))
-    elseif player_pos.y < bg_middle_pos.y - BG_Y_RANGE then
-        swap_backgrounds(self, vmath.vector3(0, -1, 0))
+    for i = 1, 3 do
+        local bg_middle_pos = go.get(self.bg_middle[i], "position")
+        if player_pos.y > bg_middle_pos.y + BG_Y_RANGE then
+            swap_backgrounds(self, vmath.vector3(0, 1, 0), i)
+        elseif player_pos.y < bg_middle_pos.y - BG_Y_RANGE then
+            swap_backgrounds(self, vmath.vector3(0, -1, 0), i)
+        end
     end
 end

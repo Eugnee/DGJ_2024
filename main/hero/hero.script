@@ -8,8 +8,8 @@ go.property("angular_velocity", 2)
 go.property("dialogue", false)
 go.property("dialogue_lock", false)
 
-local debugger = require('debugger.debugger')
-debugger.start()
+-- local debugger = require('debugger.debugger')
+-- debugger.start()
 
 local Animate = require "main.lib.animation"
 local Position = require "main.lib.position"
