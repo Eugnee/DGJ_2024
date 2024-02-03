@@ -1,0 +1,18 @@
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	print("Background 1 created!")
+	self.speed = 10
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	--local pos = go.get_position()
+	--local dir = vmath.vector3(0, -1, 0)
+	--pos = pos + dir * self.speed * dt
+	local player_pos = go.get_position()
+	go.set_position(pos)
+end

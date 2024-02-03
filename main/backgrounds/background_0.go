@@ -1,6 +1,6 @@
 components {
   id: "background"
-  component: "/main/background/background.script"
+  component: "/main/backgrounds/background_0.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "bg_sprite_1"
   type: "sprite"
-  data: "tile_set: \"/main/background_1.atlas\"\n"
+  data: "tile_set: \"/main/backgrounds/background_0.atlas\"\n"
   "default_animation: \"background1-3-export\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
