@@ -28,6 +28,7 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 ---@field is_moved bool
 ---@field speed integer
 ---@field acceleration_count integer
+---@field inertia_acceleration integer
 ---@field inertia_count float
 ---@field run_inertia bool
 ---@field angular_velocity integer
@@ -51,6 +52,7 @@ function init(self)
     self.tinting = false
     self.is_moved = false
     self.acceleration_count = self.speed / 10
+    self.inertia_acceleration = self.acceleration_count
     self.inertia_count = self.speed
 end
 
@@ -100,7 +102,7 @@ local function simple_inertia(self, dt)
             go.set_rotation(rotation)
         end
         if self.inertia_direction.y ~= 0 then
-            local distance = self.speed / self.inertia_count * dt
+            local distance = self.speed / self.inertia_count / self.inertia_acceleration * dt
             local pos = go.get_position()
             DIRECTION_VEC.y = distance
             local direction = vmath.rotate(rotation, DIRECTION_VEC)
@@ -120,8 +122,10 @@ function update(self, dt)
         local rotation = go.get_rotation()
         if self.direction.x ~= 0 then
             if self.direction.x < 0 then
+                msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
                 msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.ENABLE)
             else
+                msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.ENABLE)
             end
             rotation = rotation * vmath.quat_rotation_z(self.angular_velocity * self.direction.x * dt)
@@ -143,6 +147,7 @@ function update(self, dt)
         end
         self.inertia_count = self.speed
         self.run_inertia = true
+        self.inertia_acceleration = self.acceleration_count
         self.inertia_direction.x = self.direction.x
         self.inertia_direction.y = self.direction.y
     else
