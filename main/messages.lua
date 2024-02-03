@@ -4,6 +4,8 @@ M.START_TIMER = hash("start_timer")
 M.INCR_MONSTETS_COUNT = hash("incr_monsters_count")
 M.UPDATE_GUI_SCORE = hash("update_gui_score")
 M.CHANGE_HP_BAR = hash("change_hp_bar")
+M.UNLOCK_DIALOGUE = hash("unlock_dialogue")
+M.LOCK_DIALOGUE = hash("lock_dialogue")
 
 -- UNIT
 M.MAKE_DAMAGE = hash("make_damage")

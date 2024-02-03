@@ -3,31 +3,60 @@ local DIALOGUE_CLOSING = 1
 local DIALOGUE_ON = 2
 local DIALOGUE_OFF = 3
 local d_state = DIALOGUE_OFF
+local left_line = true
+local hero_id = "level1:/instance0"
 
 function init(self)
 	print("UI initialized")
+	self.left_line = gui.get_node("text_left")
+	self.right_line = gui.get_node("text_right")
+	self.max_switches = 3
+	self.curr_swicth = 0
 end
 
 function animate_end()
-	-- msg,post(gui.get_id('.'), "animate_done")
 	if d_state == DIALOGUE_OPENING then
 		d_state = DIALOGUE_ON
 	elseif d_state == DIALOGUE_CLOSING then
 		d_state = DIALOGUE_OFF
+		-- send message second time to fully unlock player
+		msg.post(hero_id, M.UNLOCK_DIALOGUE)
 	end
 	print("animate done")
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == hash("do_dialogue") then
+	if message_id == hash("toggle_dialogue") then
 		if d_state == DIALOGUE_OFF then
 			local d_ui = gui.get_node("dialogue_ui")
 			gui.animate(d_ui, "position.y", 320, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			d_state = DIALOGUE_OPENING
+			-- dialogue starts from left line
+			gui.set_visible(self.left_line, true)
+			gui.set_visible(self.right_line, false)
+			left_line = false
+			self.curr_switches = 1
+			msg.post(hero_id, M.LOCK_DIALOGUE)
 		elseif d_state == DIALOGUE_ON then
 			local d_ui = gui.get_node("dialogue_ui")
 			gui.animate(d_ui, "position.y", 120, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			d_state = DIALOGUE_CLOSING
+		end
+	elseif message_id == hash("next_line") and d_state == DIALOGUE_ON then
+		if self.curr_switches >= self.max_switches then
+			msg.post(".", "toggle_dialogue")
+			self.curr_switches = 0
+		else
+			self.curr_switches = self.curr_switches + 1
+			if left_line then
+				gui.set_visible(self.left_line, true)
+				gui.set_visible(self.right_line, false)
+				left_line = false
+			else
+				gui.set_visible(self.left_line, false)
+				gui.set_visible(self.right_line, true)
+				left_line = true
+			end
 		end
 	end
 end

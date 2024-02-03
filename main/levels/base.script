@@ -4,13 +4,23 @@ local BG_Y_RANGE = 561
 debugdraw = require "debug-draw.debug-draw"
 
 ---@param self any
----@param camera_id hash
 local function init_backgrounds(self, camera_id)
     self.bg_middle = factory.create("factories#background_3_factory")
     self.bg_front = factory.create("factories#background_3_factory", vmath.vector3(0, BG_Y_RANGE * 2, 0))
     self.bg_back = factory.create("factories#background_3_factory", vmath.vector3(0, -BG_Y_RANGE * 2, 0))
 
-    self.bg_static = factory.create("factories#background_0_factory", nil, nil, { camera_id = camera_id })
+    local camera_id = go.get_id("camera")
+    local hero_id = self.hero_id
+
+    self.bg_static = factory.create(
+        "factories#background_0_factory", 
+        nil, 
+        nil, 
+        { 
+            camera_id = camera_id,
+            hero_id = hero_id 
+        }
+    )
 end
 
 local function swap_backgrounds(self, dir, bg_level)
@@ -61,6 +71,7 @@ function init(self)
             go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0), nil,
             { hero_id = self.hero_id, bullet_url = msg.url("factories#enemy_bullet") })
     end
+    init_backgrounds(self)
 end
 
 function update(self)

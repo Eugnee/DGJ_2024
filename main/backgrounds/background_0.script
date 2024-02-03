@@ -1,4 +1,5 @@
 go.property("camera_id", hash(""))
+go.property("hero_id", hash(""))
 
 function init(self)
 	print("Background 0 created!")

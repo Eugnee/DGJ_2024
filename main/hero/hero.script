@@ -5,6 +5,12 @@ go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
 go.property("angular_velocity", 2)
 
+go.property("dialogue", false)
+go.property("dialogue_lock", false)
+
+local debugger = require('debugger.debugger')
+debugger.start()
+
 local Animate = require "main.lib.animation"
 local Position = require "main.lib.position"
 local Utils = require "main.lib.utils"
@@ -116,6 +122,10 @@ end
 ---@param self Hero
 ---@param dt float
 function update(self, dt)
+    if self.dialogue_lock then
+        return
+    end
+    
     if self.is_moved then
         local pos = go.get_position()
         local rotation = go.get_rotation()
@@ -187,6 +197,15 @@ function on_input(self, action_id, action)
             -- spawn_bullet(self)
             self.attacking = true
         end
+        -- dialogue
+        if action_id == C.TALK then
+            if not self.dialogue then
+                msg.post("level1:/base/base#ui", "toggle_dialogue")
+                self.dialogue = true
+            else
+                msg.post("level1:/base/base#ui", "next_line")
+            end
+        end
         -- movement
     elseif action_id == C.LEFT then
         self.is_moved = true
@@ -200,8 +219,6 @@ function on_input(self, action_id, action)
     elseif action_id == C.DOWN then
         -- self.is_moved = true
         -- self.direction.y = -1
-    elseif action_id == C.TALK then
-        msg.post("level1:/base/base#ui", "do_dialogue")
     end
 end
 
@@ -210,5 +227,14 @@ function on_message(self, message_id, message, sender)
         Position.correct_position(self, message)
     elseif message_id == M.MAKE_DAMAGE then
         take_damage(self, message.hp)
+        return
+    elseif message_id == M.LOCK_DIALOGUE then
+        self.dialogue_lock = true
+    elseif message_id == M.UNLOCK_DIALOGUE then
+        self.dialogue_lock = false
+        self.dialogue = false
+    elseif message_id == hash("hello_msg") then
+        print("hello sent from")
+        print(sender)
     end
 end
