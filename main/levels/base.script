@@ -1,4 +1,5 @@
-local MAP_LENGTH = 1024
+local MAP_HEIGHT = 1024
+local MAP_WIDTH = 920
 local BG_Y_RANGE = 561
 local debugdraw = require "debug-draw.debug-draw"
 
@@ -47,14 +48,14 @@ function init(self)
     msg.post(
         "camera",
         "bounds",
-        { left = -MAP_LENGTH, right = MAP_LENGTH, bottom = -MAP_LENGTH, top = MAP_LENGTH }
+        { left = -MAP_WIDTH / 2, right = MAP_WIDTH / 2, bottom = -MAP_HEIGHT, top = MAP_HEIGHT * 10 }
     )
     init_backgrounds(self)
 end
 
 function update(self)
-    debugdraw.line(-MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH, MAP_LENGTH)
-    debugdraw.line(MAP_LENGTH, -MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH)
+    -- debugdraw.line(-MAP_HEIGHT, -MAP_HEIGHT, MAP_HEIGHT, MAP_HEIGHT)
+    -- debugdraw.line(MAP_HEIGHT, -MAP_HEIGHT, -MAP_HEIGHT, MAP_HEIGHT)
 
     local bg_middle_pos = go.get(self.bg_middle, "position")
     local player_pos = go.get(self.hero_id, "position")
