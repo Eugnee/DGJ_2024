@@ -3,6 +3,10 @@ fonts {
   name: "system_font"
   font: "/builtins/fonts/system_font.font"
 }
+fonts {
+  name: "retro_gaming"
+  font: "/fonts/retro_gaming.font"
+}
 textures {
   name: "ui"
   texture: "/main/levels/ui.atlas"
@@ -281,7 +285,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "Ha! This is vile enemy dialogue line!"
-  font: "system_font"
+  font: "retro_gaming"
   id: "text_left"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -348,7 +352,7 @@ nodes {
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
   text: "This is even more despicable line on the right"
-  font: "system_font"
+  font: "retro_gaming"
   id: "text_right"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
