@@ -121,7 +121,7 @@ function update(self, dt)
         local pos = go.get_position()
         local rotation = go.get_rotation()
         if self.direction.x ~= 0 then
-            if self.direction.x < 0 then
+            if self.direction.x > 0 then
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
                 msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.ENABLE)
             else
@@ -131,6 +131,7 @@ function update(self, dt)
             rotation = rotation *
                 vmath.quat_rotation_z(self.angular_velocity * self.direction.x * dt / self.acceleration_count)
             go.set_rotation(rotation)
+            self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
         else
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
@@ -142,10 +143,10 @@ function update(self, dt)
             local direction = vmath.rotate(rotation, DIRECTION_VEC)
             pos = pos + direction
             Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
+            self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
         else
             msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
         end
-        self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
         self.inertia_count = self.speed
         self.run_inertia = true
         self.inertia_acceleration = self.acceleration_count
