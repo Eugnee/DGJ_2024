@@ -58,8 +58,8 @@ function update(self)
 
     local bg_middle_pos = go.get(self.bg_middle, "position")
     local player_pos = go.get(self.hero_id, "position")
-
-    msg.post(self.bg_static, "update_position", { pos = player_pos })
+    local cam_pos = go.get_position("camera")
+    msg.post(self.bg_static, "update_position", { pos = cam_pos })
     
     if player_pos.y > bg_middle_pos.y + BG_Y_RANGE then
         swap_backgrounds(self, vmath.vector3(0, 1, 0))
