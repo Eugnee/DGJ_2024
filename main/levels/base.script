@@ -1,13 +1,48 @@
 local MAP_LENGTH = 1024
 local debugdraw = require "debug-draw.debug-draw"
 
+-- local debugger = require('debugger.debugger')
+-- debugger.start()
+
+local function init_background(self)
+    self.bg_middle = factory.create("factories#backgroundfactory")
+    self.bg_front = factory.create("factories#backgroundfactory", vmath.vector3(0, 720, 0))
+    self.bg_back = factory.create("factories#backgroundfactory", vmath.vector3(0, -720, 0))
+  
+    --factory.create("factories#backgroundfactory", vmath.vector3(1280, 0, 0))
+    --factory.create("factories#backgroundfactory", vmath.vector3(-1280, 0, 0))
+    --factory.create("factories#backgroundfactory")
+end
+
+local function swap_background(self, dir)
+    if dir == vmath.vector3(0, 1, 0) then
+        print("swap forward background")
+        local bg_back_pos = go.get(self.bg_back, "position")
+        bg_back_pos.y = bg_back_pos.y + 720 * 3
+        go.set(self.bg_back, "position", bg_back_pos)
+        local bg_back = self.bg_back
+        self.bg_back = self.bg_middle
+        self.bg_middle = self.bg_front
+        self.bg_front = bg_back
+    elseif dir == vmath.vector3(0, -1, 0) then
+        print("swap backward background")                s
+        local bg_front_pos = go.get(self.bg_front, "position")
+        bg_front_pos.y = bg_front_pos.y - 720 * 3
+        go.set(self.bg_front, "position", bg_front_pos)
+        local bg_front = self.bg_front
+        self.bg_front = self.bg_middle
+        self.bg_middle = self.bg_back
+        self.bg_back = bg_front
+    end
+end
+
 function init(self)
     math.randomseed(os.time())
-    local hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
+    self.hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
         { bullet_url = msg.url("factories#bullet") }
     )
     msg.post("camera", "follow", {
-        target = hero_id,
+        target = self.hero_id,
         lerp = 0.7,
         horizontal = true,
         vertical = true,
@@ -18,9 +53,19 @@ function init(self)
         "bounds",
         { left = -MAP_LENGTH, right = MAP_LENGTH, bottom = -MAP_LENGTH, top = MAP_LENGTH }
     )
+    init_background(self)
 end
 
-function update()
+function update(self)
     debugdraw.line(-MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH, MAP_LENGTH)
     debugdraw.line(MAP_LENGTH, -MAP_LENGTH, -MAP_LENGTH, MAP_LENGTH)
+
+    local bg_middle_pos = go.get(self.bg_middle, "position")
+    local player_pos = go.get(self.hero_id, "position")
+
+    if player_pos.y > bg_middle_pos.y + 360 then
+        swap_background(self, vmath.vector3(0, 1, 0))
+    elseif player_pos.y < bg_middle_pos.y - 360 then
+        swap_background(self, vmath.vector3(0, -1, 0))
+    end
 end
