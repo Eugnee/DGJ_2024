@@ -20,9 +20,10 @@ C.SPRITE_FIRE_FRONT = "#fire_front"
 C.HERO = hash("hero")
 C.BLOCKED = hash("blocked")
 C.ENEMY = hash("enemy")
+C.ENEMY_NEARBY = hash("enemy_nearby")
 
 C.BULLET_OFFSET = vmath.vector3(0, 5, 0)
-C.BULLET_ROTATION = vmath.vector3(0, 1, 0)
+C.UP_DIRECTION = vmath.vector3(0, 1, 0)
 
 -- ACTIONS
 C.FIRE = hash("attack")

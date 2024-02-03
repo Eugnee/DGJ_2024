@@ -8,7 +8,6 @@ go.property("angular_velocity", 2)
 local Animate = require "main.lib.animation"
 local Position = require "main.lib.position"
 local Utils = require "main.lib.utils"
-debugdraw = require "debug-draw.debug-draw"
 
 local IDLE_ANIM = hash("idle")
 local ATTACK_ANIM = hash("attack")
@@ -207,11 +206,9 @@ function on_input(self, action_id, action)
 end
 
 function on_message(self, message_id, message, sender)
-    if message_id == M.CONTACT_POINT_RESPONSE then
+    if message_id == M.CONTACT_POINT_RESPONSE and (message.other_group == C.ENEMY) then
         Position.correct_position(self, message)
-        return
     elseif message_id == M.MAKE_DAMAGE then
         take_damage(self, message.hp)
-        return
     end
 end

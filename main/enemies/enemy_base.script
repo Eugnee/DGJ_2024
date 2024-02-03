@@ -1,0 +1,156 @@
+go.property("hp", 200)
+go.property("hero_id", hash(""))
+go.property("speed", 200)
+go.property("damage", 50)
+go.property("angular_velocity", 3)
+go.property("attack_distance", 800)
+go.property("bullet_url", msg.url())
+go.property("bullet_speed", 800)
+
+local Animate = require "main.lib.animation"
+local Position = require "main.lib.position"
+local Utils = require "main.lib.utils"
+
+local RAD_180 = math.pi
+local ATTACK_ANIM = hash("attack")
+local IDLE_ANIM = hash("idle")
+
+local random = math.random
+
+---@param self Enemy
+local function attack(self)
+    local pos = go.get_position()
+    pos.z = C.OBECTS_Z_INDEX - 0.01
+    factory.create(self.bullet_url, pos, go.get_rotation(),
+        { damage = self.damage, speed = self.bullet_speed })
+    self.locked_anim = false
+    Animate.play_animation(self, C.SPRITE, IDLE_ANIM)
+end
+
+
+---@class Enemy: AnimatedObj
+---@field nearby table<hash, bool>
+---@field is_dead bool
+---@field correction vector3
+---@field hero_id hash
+---@field speed integer
+---@field damage integer
+---@field angular_velocity integer
+---@field random_target_point vector3
+---@field attack_distance integer
+---@field bullet_url url
+---@field bullet_speed integer
+
+---comment
+---@param self Enemy
+function init(self)
+    self.is_dead = false
+    self.correction = vmath.vector3()
+    self.nearby = {}
+    self.random_target_point = nil
+    -- self.attacker = timer.delay(0.5, true, spawn_bullet)
+end
+
+function get_damage(self, hp)
+    if self.is_dead then
+        return
+    end
+    self.hp = self.hp - hp
+    if self.hp <= 0 then
+        -- msg.post("/main#main", M.INCR_MONSTETS_COUNT)
+        self.is_dead = true
+        go.delete()
+        -- animate:play_animation(self, "#sprite", DEATH, true, function()
+        --     go.delete()
+        -- end)
+        return
+    end
+end
+
+local function get_target(self, self_pos, hero_pos)
+    if self.random_target_point and Utils.distance_to(self_pos, self.random_target_point) > 50 then
+        return self.random_target_point
+    end
+    local distance_to_hero = Utils.distance_to(self_pos, hero_pos)
+    if distance_to_hero <= 300 then
+        self.random_target_point = hero_pos + vmath.vector3(random(-600, 600), random(-600, 600), 0)
+        return self.random_target_point
+    end
+    self.random_target_point = nil
+    return hero_pos
+end
+
+
+---@param self Enemy
+---@param dt float
+function update(self, dt)
+    local pos = go.get_position()
+    local hero_pos = go.get_position(self.hero_id)
+    local target_pos = get_target(self, pos, hero_pos)
+    local target_angle = Utils.angle_to(pos, target_pos)
+
+    -- find the most nearby other enemy
+    local nearby = nil
+    local nearby_distance = nil
+    local nearby_angle = target_angle
+    for nearby_id, v in pairs(self.nearby) do
+        if v then
+            local nearby_pos = go.get_position(nearby_id)
+            local distance = Utils.distance_to(pos, nearby_pos)
+            local angle = Utils.angle_to(pos, nearby_pos)
+            if not nearby or distance < nearby_distance then
+                nearby = nearby_id
+                nearby_distance = distance
+                nearby_angle = angle
+            end
+        end
+    end
+
+    -- adjust target angle to avoid nearby enemy
+    -- the amount to adjust angle depends on the distance to the nearby enemy
+    -- the closer to the nearby enemy the more this enemy should steer away
+    if nearby then
+        local avoidance_factor = (45 / nearby_distance) -- tweak this!
+        -- local avoidance_factor = 1 -- tweak this!
+        local avoidance_angle = (target_angle - nearby_angle) * avoidance_factor
+        target_angle = target_angle + Utils.clamp(avoidance_angle, -RAD_180, RAD_180)
+    end
+
+    -- rotate towards the target angle
+    -- spherical interpolation towards the target rotation
+    -- tweak rotation speed to turn faster
+    local current_rotation = go.get_rotation()
+    local target_rotation = vmath.quat_rotation_z(target_angle)
+    local rotation = vmath.slerp(self.angular_velocity * dt, current_rotation, target_rotation)
+    go.set_rotation(rotation)
+
+    -- local z = math.rad(go.get(".", "euler.z"))
+
+    -- move in current direction
+    local direction = vmath.rotate(rotation, C.UP_DIRECTION)
+    local distance = self.speed * dt
+    Position.set_iso_position(pos + direction * distance, C.OBECTS_Z_INDEX)
+    local goal = pos + direction * self.attack_distance
+    local raycast_res = physics.raycast(pos, goal, { C.HERO, C.ENEMY }, { all = false })
+    if raycast_res ~= nil and raycast_res[1].group == C.HERO then
+        Animate.play_animation(self, C.SPRITE, ATTACK_ANIM, true, attack)
+    end
+
+    self.correction.x = 0
+    self.correction.y = 0
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == M.TRIGGER_RESPONSE then
+        if message.enter then
+            self.nearby[message.other_id] = true
+        else
+            self.nearby[message.other_id] = false
+        end
+    elseif message_id == M.CONTACT_POINT_RESPONSE and (message.other_group == C.HERO or message.other_group == C.ENEMY) then
+        Position.correct_position(self, message)
+    elseif message_id == M.MAKE_DAMAGE then
+        get_damage(self, message.hp)
+        return
+    end
+end

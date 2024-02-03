@@ -1,8 +1,7 @@
-go.property("speed", 500)
-go.property("damage", 30)
+go.property("speed", 200)
+go.property("damage", 10)
 
 function init(self)
-	self.counter = 0
 	self.start_pos = go.get_position()
 end
 
@@ -17,14 +16,12 @@ function update(self, dt)
 end
 
 function on_message(self, message_id, message, sender)
-	if message_id == M.CONTACT_POINT_RESPONSE
+	if message_id == M.TRIGGER_RESPONSE and message.enter
 	then
-		if self.counter == 0 then
+		if message.other_group == C.BLOCKED then
+			go.delete()
+		elseif message.other_group == C.HERO then
 			msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
-			msg.post(C.SPRITE, M.DISABLE)
-		end
-		self.counter = self.counter + 1
-		if self.counter > 5 then
 			go.delete()
 		end
 	end

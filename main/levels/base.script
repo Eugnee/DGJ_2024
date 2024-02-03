@@ -1,7 +1,7 @@
 local MAP_HEIGHT = 1024
 local MAP_WIDTH = 920
 local BG_Y_RANGE = 561
-local debugdraw = require "debug-draw.debug-draw"
+debugdraw = require "debug-draw.debug-draw"
 
 ---@param self any
 ---@param camera_id hash
@@ -54,6 +54,13 @@ function init(self)
     )
     local camera_id = go.get_id("camera")
     init_backgrounds(self, camera_id)
+
+    -- creating some enemies just for testing
+    for i = 0, 3 do
+        local enemy_id = factory.create("factories#pirat",
+            go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0), nil,
+            { hero_id = self.hero_id, bullet_url = msg.url("factories#enemy_bullet") })
+    end
 end
 
 function update(self)
