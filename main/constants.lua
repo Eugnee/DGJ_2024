@@ -12,6 +12,7 @@ C.TILE_SIZE = 16
 
 -- ANIMATION
 C.SPRITE = "#sprite"
+C.SPRITE_DAMAGED = "#damaged"
 C.SPRITE_FIRE_SIDE_RIGHT = "#fire_side_right"
 C.SPRITE_FIRE_SIDE_LEFT = "#fire_side_left"
 C.SPRITE_FIRE_FRONT = "#fire_front"

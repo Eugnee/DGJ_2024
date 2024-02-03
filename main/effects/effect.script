@@ -1,0 +1,7 @@
+local EXP_ANIM = hash("exp")
+
+function init()
+    sprite.play_flipbook(C.SPRITE, EXP_ANIM, function()
+        go.delete()
+    end)
+end

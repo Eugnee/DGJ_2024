@@ -8,17 +8,17 @@ debugdraw = require "debug-draw.debug-draw"
 
 ---@param self any
 local function init_backgrounds(self, camera_id)
-    self.bg_middle = { 
+    self.bg_middle = {
         factory.create("factories#background_factory1"),
         factory.create("factories#background_factory2"),
-        factory.create("factories#background_factory3") 
+        factory.create("factories#background_factory3")
     }
-    self.bg_front = { 
+    self.bg_front = {
         factory.create("factories#background_factory1", vmath.vector3(0, BG_Y_RANGE * 2, 0)),
         factory.create("factories#background_factory2", vmath.vector3(0, BG_Y_RANGE * 2, 0)),
-        factory.create("factories#background_factory3", vmath.vector3(0, BG_Y_RANGE * 2, 0)) 
+        factory.create("factories#background_factory3", vmath.vector3(0, BG_Y_RANGE * 2, 0))
     }
-    self.bg_back = { 
+    self.bg_back = {
         factory.create("factories#background_factory1", vmath.vector3(0, -BG_Y_RANGE * 2, 0)),
         factory.create("factories#background_factory2", vmath.vector3(0, -BG_Y_RANGE * 2, 0)),
         factory.create("factories#background_factory3", vmath.vector3(0, -BG_Y_RANGE * 2, 0))
@@ -28,12 +28,12 @@ local function init_backgrounds(self, camera_id)
     local hero_id = self.hero_id
 
     self.bg_static = factory.create(
-        "factories#background_factory0", 
-        nil, 
-        nil, 
-        { 
+        "factories#background_factory0",
+        nil,
+        nil,
+        {
             camera_id = camera_id,
-            hero_id = hero_id 
+            hero_id = hero_id
         }
     )
 end
@@ -63,7 +63,7 @@ end
 function init(self)
     math.randomseed(os.time())
     self.hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
-        { bullet_url = msg.url("factories#bullet") }
+        { bullet_url = msg.url("factories#bullet"), explosion_url = msg.url("factories#explosion") }
     )
     msg.post("camera", "follow", {
         target = self.hero_id,
@@ -84,7 +84,12 @@ function init(self)
     for i = 0, 3 do
         local enemy_id = factory.create("factories#pirat",
             go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0), nil,
-            { hero_id = self.hero_id, bullet_url = msg.url("factories#enemy_bullet") })
+            {
+                hero_id = self.hero_id,
+                bullet_url = msg.url("factories#enemy_bullet"),
+                explosion_url = msg.url(
+                    "factories#explosion")
+            })
     end
     init_backgrounds(self)
 end

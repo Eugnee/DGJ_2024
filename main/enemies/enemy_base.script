@@ -5,6 +5,7 @@ go.property("damage", 50)
 go.property("angular_velocity", 3)
 go.property("attack_distance", 800)
 go.property("bullet_url", msg.url())
+go.property("explosion_url", msg.url())
 go.property("bullet_speed", 800)
 
 local Animate = require "main.lib.animation"
@@ -23,9 +24,8 @@ local function attack(self)
     local pos = go.get_position()
     pos.z = C.OBECTS_Z_INDEX - 0.01
     factory.create(self.bullet_url, pos, go.get_rotation(),
-        { damage = self.damage, speed = self.bullet_speed })
-    self.locked_anim = false
-    Animate.play_animation(self, C.SPRITE, IDLE_ANIM)
+        { damage = self.damage, speed = self.bullet_speed, explosion_url = self.explosion_url })
+    self.current_anim = nil
 end
 
 
@@ -49,7 +49,6 @@ function init(self)
     self.correction = vmath.vector3()
     self.nearby = {}
     self.random_target_point = nil
-    -- self.attacker = timer.delay(0.5, true, spawn_bullet)
 end
 
 function get_damage(self, hp)
@@ -159,6 +158,5 @@ function on_message(self, message_id, message, sender)
     elseif message_id == M.MAKE_DAMAGE then
         pprint("getting damage")
         get_damage(self, message.hp)
-        return
     end
 end

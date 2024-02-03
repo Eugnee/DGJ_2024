@@ -3,6 +3,7 @@ go.property("speed", 300)
 go.property("damage", 50)
 go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
+go.property("explosion_url", msg.url())
 go.property("angular_velocity", 2)
 
 go.property("dialogue", false)
@@ -43,6 +44,7 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 
 ---@param self Hero
 function init(self)
+    msg.post(C.SPRITE_DAMAGED, M.DISABLE)
     msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
     msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
     msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
@@ -75,9 +77,13 @@ local function take_damage(self, hp)
     local hp = self.hp - hp
     set_hp(self, hp)
     -- msg.post("/ui", "change_hero_hp", { hp = self.hp, max_hp = self.max_hp })
-
+    msg.post(C.SPRITE_DAMAGED, M.ENABLE)
+    Animate.play_animation(self, C.SPRITE_DAMAGED, DAMAGED_ANIM, false, function()
+        msg.post(C.SPRITE_DAMAGED, M.DISABLE)
+    end)
     Animate.play_animation(self, C.SPRITE, DAMAGED_ANIM, true, function()
         Animate.play_animation(self, C.SPRITE, IDLE_ANIM)
+        msg.post(C.SPRITE_DAMAGED, M.DISABLE)
     end)
     if self.hp <= 0 then
         -- msg.post("/main#main", M.GAME_OVER)
@@ -89,7 +95,7 @@ local function spawn_bullet(self)
     local pos = go.get_position()
     pos.z = C.OBECTS_Z_INDEX - 0.01
     factory.create(self.bullet_url, pos, go.get_rotation(),
-        { damage = self.damage, speed = self.bullet_speed })
+        { damage = self.damage, speed = self.bullet_speed, explosion_url = self.explosion_url })
     self.attacking = false
     self.current_anim = nil
 end

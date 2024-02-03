@@ -1,5 +1,6 @@
 go.property("speed", 500)
 go.property("damage", 30)
+go.property("explosion_url", msg.url())
 
 function init(self)
 	self.counter = 0
@@ -20,6 +21,10 @@ function on_message(self, message_id, message, sender)
 	if message_id == M.TRIGGER_RESPONSE
 	then
 		msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
+		pprint(self.explosion_url)
+		local pos = go.get_position()
+		pos.z = C.OBECTS_Z_INDEX + 0.1
+		factory.create(self.explosion_url, pos)
 		go.delete()
 	end
 end
