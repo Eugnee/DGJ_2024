@@ -1,9 +1,8 @@
 go.property("hp", 200)
 go.property("speed", 300)
 go.property("damage", 35)
-go.property("bullet_speed", 500)
+go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
-go.property("aim_id", hash(""))
 go.property("angular_velocity", 2)
 
 local Animate = require "main.lib.animation"
@@ -11,10 +10,12 @@ local Position = require "main.lib.position"
 local Utils = require "main.lib.utils"
 debugdraw = require "debug-draw.debug-draw"
 
-local camera = require "orthographic.camera"
+local IDLE_ANIM = hash("idle")
+local ATTACK_ANIM = hash("attack")
+
 local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 
----@class Hero
+---@class Hero : AnimatedObj
 ---@field direction vector3
 ---@field inertia_direction vector3
 ---@field current_animation hash|nil
@@ -23,7 +24,6 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 ---@field locked_anim bool
 ---@field max_hp integer
 ---@field hp integer
----@field aim vector3
 ---@field tinting bool
 ---@field is_moved bool
 ---@field speed integer
@@ -31,6 +31,9 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 ---@field inertia_count float
 ---@field run_inertia bool
 ---@field angular_velocity integer
+---@field bullet_url url
+---@field bullet_speed integer
+---@field damage integer
 
 ---@param self Hero
 function init(self)
@@ -45,10 +48,8 @@ function init(self)
     self.attacking = false
     self.locked_anim = false
     self.max_hp = self.hp
-    self.aim = vmath.vector3()
     self.tinting = false
     self.is_moved = false
-    -- inertia
     self.acceleration_count = self.speed / 10
     self.inertia_count = self.speed
 end
@@ -78,24 +79,15 @@ local function take_damage(self, hp)
     end
 end
 
-
-local function enemy_damage(self, hp)
-    if self.vampirism <= 0 then
-        return
-    end
-    local vampirism = (hp / 100) * self.vampirism
-    local hp = self.hp + vampirism
-    if hp > self.max_hp then
-        hp = self.max_hp
-    end
-    set_hp(self, hp)
+---@param self Hero
+local function spawn_bullet(self)
+    local pos = go.get_position()
+    pos.z = C.OBECTS_Z_INDEX - 0.01
+    factory.create(self.bullet_url, pos, go.get_rotation(),
+        { damage = self.damage, speed = self.bullet_speed })
+    self.attacking = false
+    self.current_anim = nil
 end
-
--- function fixed_update(self, dt)
---     local pos = go.get_position()
---     debugdraw.box(pos.x, pos.y, 64, 64)
--- end
-
 
 ---@param self Hero
 ---@param dt float
@@ -123,13 +115,6 @@ end
 ---@param self Hero
 ---@param dt float
 function update(self, dt)
-    local anim;
-    -- aim
-    -- local cursor_pos = camera.screen_to_world(nil, self.aim)
-    -- self.cursor_pos = vmath.lerp(0.5, go.get_position(), cursor_pos)
-    -- cursor original pos for aim
-    -- cursor_pos.z = C.OBECTS_Z_INDEX + 0.1
-    -- go.set_position(cursor_pos, self.aim_id)
     if self.is_moved then
         local pos = go.get_position()
         local rotation = go.get_rotation()
@@ -170,48 +155,28 @@ function update(self, dt)
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
         end
     end
-    anim = ""
-    -- anim = Animate.get_anim_name_by_direction("hero", vmath.normalize(self.cursor_pos - pos))
-    if self.is_moved then
-        anim = hash(anim)
-    else
-        anim = hash(anim)
-        -- anim = hash("idle-" .. anim)
+    if self.attacking then
+        Animate.play_animation(self, C.SPRITE, ATTACK_ANIM, false, spawn_bullet)
     end
-    -- Animate.play_animation(self, C.SPRITE, anim)
+    -- anim = Animate.get_anim_name_by_direction("hero", vmath.normalize(self.cursor_pos - pos))
 
     simple_inertia(self, dt)
     self.direction.x = 0
     self.direction.y = 0
-    self.correction = vmath.vector3()
-    self.attacking = false
+    self.correction.x = 0
+    self.correction.y = 0
     self.is_moved = false;
 end
-
--- local function spawn_bullet(self)
---     local start_pos = go.get_world_position()
---     local direction = self.cursor_pos - start_pos
---     -- local offset = vmath.normalize(direction)
---     -- offset.x = offset.x * 10
---     -- offset.x = offset.y * 50
---     -- start_pos = start_pos + offset
---     local angle = -math.atan2(direction.x, direction.y)
---     local quat = vmath.quat_rotation_z(angle)
---     local pos = start_pos + vmath.rotate(quat, C.BULLET_OFFSET) * 10
---     pos.z = C.OBECTS_Z_INDEX
---     factory.create(self.bullet_url, pos, quat,
---         { damage = self.damage, speed = self.bullet_speed, owner_id = go.get_id() })
--- end
 
 ---@param self any
 ---@param action_id hash
 ---@param action {pressed: bool, x: number, y: number}
 function on_input(self, action_id, action)
-    self.aim.x = action.x
-    self.aim.y = action.y
     if action.pressed then
         -- actions only if pressed
-        if action_id == C.FIRE
+        if
+            action_id == C.FIRE
+            and not self.attacking
         then
             -- spawn_bullet(self)
             self.attacking = true
@@ -235,9 +200,9 @@ end
 function on_message(self, message_id, message, sender)
     if message_id == M.CONTACT_POINT_RESPONSE then
         Position.correct_position(self, message)
+        return
     elseif message_id == M.MAKE_DAMAGE then
         take_damage(self, message.hp)
-    elseif message_id == M.ENEMY_DAMAGE then
-        enemy_damage(self, message.hp)
+        return
     end
 end

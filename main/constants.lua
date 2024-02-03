@@ -25,7 +25,7 @@ C.BULLET_OFFSET = vmath.vector3(0, 5, 0)
 C.BULLET_ROTATION = vmath.vector3(0, 1, 0)
 
 -- ACTIONS
-C.FIRE = hash("fire")
+C.FIRE = hash("attack")
 C.LEFT = hash("left")
 C.UP = hash("up")
 C.RIGHT = hash("right")
@@ -40,8 +40,5 @@ C.ITEMS.MAX_HP_INCREASE = hash("max_hp_increase")
 C.ITEMS.MOVE_SPEED_INCREASE = hash("move_speed_increase")
 C.ITEMS.RICOCHET_ON = hash("ricochet_on")
 C.ITEMS.VAMPIRISM = hash("vampirism")
-
--- MOVEMENT
-C.UP_DIR = vmath.vector3(0, 1, 0)
 
 return C

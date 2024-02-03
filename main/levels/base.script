@@ -3,7 +3,9 @@ local debugdraw = require "debug-draw.debug-draw"
 
 function init(self)
     math.randomseed(os.time())
-    local hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil)
+    local hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
+        { bullet_url = msg.url("factories#bullet") }
+    )
     msg.post("camera", "follow", {
         target = hero_id,
         lerp = 0.7,
