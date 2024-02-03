@@ -201,6 +201,8 @@ function on_input(self, action_id, action)
     elseif action_id == C.DOWN then
         -- self.is_moved = true
         -- self.direction.y = -1
+    elseif action_id == C.TALK then
+        msg.post("level1:/base/base#ui", "do_dialogue")
     end
 end
 

@@ -30,6 +30,7 @@ C.LEFT = hash("left")
 C.UP = hash("up")
 C.RIGHT = hash("right")
 C.DOWN = hash("down")
+C.TALK = hash("talk")
 
 -- ITEMS
 C.ITEMS = {}

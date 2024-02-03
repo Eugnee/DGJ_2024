@@ -1,0 +1,33 @@
+local DIALOGUE_OPENING = 0
+local DIALOGUE_CLOSING = 1
+local DIALOGUE_ON = 2
+local DIALOGUE_OFF = 3
+local d_state = DIALOGUE_OFF
+
+function init(self)
+	print("UI initialized")
+end
+
+function animate_end()
+	-- msg,post(gui.get_id('.'), "animate_done")
+	if d_state == DIALOGUE_OPENING then
+		d_state = DIALOGUE_ON
+	elseif d_state == DIALOGUE_CLOSING then
+		d_state = DIALOGUE_OFF
+	end
+	print("animate done")
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("do_dialogue") then
+		if d_state == DIALOGUE_OFF then
+			local d_ui = gui.get_node("dialogue_ui")
+			gui.animate(d_ui, "position.y", 320, gui.EASING_OUTSINE, 1.5, 0, animate_end)
+			d_state = DIALOGUE_OPENING
+		elseif d_state == DIALOGUE_ON then
+			local d_ui = gui.get_node("dialogue_ui")
+			gui.animate(d_ui, "position.y", 120, gui.EASING_OUTSINE, 1.5, 0, animate_end)
+			d_state = DIALOGUE_CLOSING
+		end
+	end
+end
