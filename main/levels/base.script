@@ -54,7 +54,6 @@ function init(self)
     )
     local camera_id = go.get_id("camera")
     init_backgrounds(self, camera_id)
-    print(go.get_id())
 end
 
 function update(self)
