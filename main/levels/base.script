@@ -25,7 +25,7 @@ local function swap_background(self, dir)
         self.bg_middle = self.bg_front
         self.bg_front = bg_back
     elseif dir == vmath.vector3(0, -1, 0) then
-        print("swap backward background")                s
+        print("swap backward background")
         local bg_front_pos = go.get(self.bg_front, "position")
         bg_front_pos.y = bg_front_pos.y - 720 * 3
         go.set(self.bg_front, "position", bg_front_pos)
