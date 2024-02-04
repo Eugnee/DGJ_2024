@@ -2,7 +2,7 @@ go.property("hp", 100)
 go.property("hero_id", hash(""))
 go.property("speed", 200)
 go.property("damage", 50)
-go.property("angular_velocity", 3)
+go.property("angular_velocity", 2)
 go.property("attack_distance", 800)
 go.property("bullet_url", msg.url())
 go.property("explosion_url", msg.url())
@@ -119,8 +119,7 @@ function update(self, dt)
     -- the amount to adjust angle depends on the distance to the nearby enemy
     -- the closer to the nearby enemy the more this enemy should steer away
     if nearby then
-        local avoidance_factor = (45 / nearby_distance) -- tweak this!
-        -- local avoidance_factor = 1 -- tweak this!
+        local avoidance_factor = (10 / nearby_distance) -- tweak this!
         local avoidance_angle = (target_angle - nearby_angle) * avoidance_factor
         target_angle = target_angle + Utils.clamp(avoidance_angle, -RAD_180, RAD_180)
     end
