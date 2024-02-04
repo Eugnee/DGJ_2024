@@ -16,6 +16,7 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == M.TRIGGER_RESPONSE then
+		msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#item_grab", gate_time = 0.3 })
 		go.delete()
 		msg.post(hero_id, M.SCORE, { score = self.score })
 	end

@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/pirat.tilesource\"\n"
+  data: "tile_set: \"/main/enemies/pirate.tilesource\"\n"
   "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
@@ -133,7 +133,7 @@ embedded_components {
 embedded_components {
   id: "fire"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/pirat_fire.tilesource\"\n"
+  data: "tile_set: \"/main/enemies/pirate_fire.tilesource\"\n"
   "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

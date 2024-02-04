@@ -4,10 +4,17 @@ go.property("hero_id", hash(""))
 
 function init(self)
     print("loading leve1")
-    for i = 0, 3 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0)
-        fabrics.create_pirat(self.hero_id, pos, i + 2)
-    end
+    
+    local enemy_creator = timer.delay(30, true, function ()
+            for i = 0, 3 do
+                local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0)
+                fabrics.create_pirat(self.hero_id, pos, i + 2)
+            end
+        end
+    )
+    timer.delay(5, false, function ()
+        timer.trigger(enemy_creator)
+    end)
 
     -- first batch close
     for i = 0, 10 do

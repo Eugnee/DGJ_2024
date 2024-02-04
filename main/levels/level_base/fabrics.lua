@@ -12,7 +12,7 @@ end
 ---@param position vector3
 ---@return hash
 function Fabrics.create_pirat(hero_id, position, pirate_id)
-    return factory.create("/base/factories#pirat",
+    return factory.create("/base/factories#pirate",
         position, nil,
         {
             hero_id = hero_id,
