@@ -21,7 +21,6 @@ function on_message(self, message_id, message, sender)
 		-- Only play sounds that are not currently in the gating table.
 		if self.sounds[message.sound] == nil then
 			-- Store sound timer in table
-			pprint("play sound")
 			self.sounds[message.sound] = message.gate_time or gate_time
 			-- Play the sound
 			sound.play(message.sound, { gain = message.gain })
