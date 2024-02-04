@@ -3,7 +3,6 @@ local Fabrics = {}
 ---comment
 ---@return hash
 function Fabrics.create_hero()
-    pprint(msg.url())
     return factory.create("/base/factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
         { bullet_url = msg.url("/base/factories#bullet"), explosion_url = msg.url("/base/factories#explosion") }
     )
