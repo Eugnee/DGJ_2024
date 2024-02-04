@@ -41,6 +41,8 @@ local DIRECTION_VEC = vmath.vector3(0, 0, 0)
 ---@field bullet_url url
 ---@field bullet_speed integer
 ---@field damage integer
+---@field engine_sound bool
+---@field engine_sound_file url
 
 ---@param self Hero
 function init(self)
@@ -63,6 +65,9 @@ function init(self)
     shared_table.add_value(self.direction)
     shared_table.add_value(0)
     shared_table.add_value(0)
+    self.engine_sound_file = msg.url("/base/sounds#hero_engine")
+    sound.set_gain(self.engine_sound_file, 0)
+    sound.play(self.engine_sound_file)
 end
 
 function final()
@@ -142,6 +147,10 @@ function update(self, dt)
             game_ended = true
             return
         end
+        if self.acceleration_count == self.speed / 10 then
+            -- if movement starts
+            msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_start" })
+        end
         if self.direction.x ~= 0 then
             if self.direction.x > 0 then
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
@@ -174,6 +183,11 @@ function update(self, dt)
         self.inertia_acceleration = self.acceleration_count
         self.inertia_direction.x = self.direction.x
         self.inertia_direction.y = self.direction.y
+        if not self.engine_sound then
+            self.engine_sound = true
+            sound.set_gain(self.engine_sound_file, 0.5)
+        end
+        -- msg.post(M.SOUND_GATE, M.PLAY_SOUND, { gate_time = 4.5, sound = "/base/sounds#hero_engine" })
     else
         self.acceleration_count = self.speed / 10
         if self.run_inertia then
@@ -182,6 +196,10 @@ function update(self, dt)
             msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
+        end
+        if self.engine_sound then
+            self.engine_sound = false
+            sound.set_gain("/base/sounds#hero_engine", 0)
         end
     end
     if self.attacking then

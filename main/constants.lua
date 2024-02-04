@@ -36,13 +36,5 @@ C.DOWN = hash("down")
 C.TALK = hash("talk")
 
 -- ITEMS
-C.ITEMS = {}
-C.ITEMS.ATTACK_SPEED_INCREASE = hash("attack_speed_increase")
-C.ITEMS.ATTACK_DAMAGE_INCREASE = hash("attack_damage_increase")
-C.ITEMS.HP_INCREASE = hash("hp_increase")
-C.ITEMS.MAX_HP_INCREASE = hash("max_hp_increase")
-C.ITEMS.MOVE_SPEED_INCREASE = hash("move_speed_increase")
-C.ITEMS.RICOCHET_ON = hash("ricochet_on")
-C.ITEMS.VAMPIRISM = hash("vampirism")
 
 return C
