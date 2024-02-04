@@ -1,7 +1,15 @@
-script: ""
+script: "/main/levels/level_done/level_done.gui_script"
 fonts {
   name: "system_font"
   font: "/builtins/fonts/system_font.font"
+}
+fonts {
+  name: "retro_gaming"
+  font: "/fonts/retro_gaming.font"
+}
+textures {
+  name: "ui"
+  texture: "/main/levels/ui.atlas"
 }
 background_color {
   x: 0.0
@@ -11,8 +19,8 @@ background_color {
 }
 nodes {
   position {
-    x: 466.0
-    y: 333.0
+    x: 480.0
+    y: 407.0
     z: 0.0
     w: 1.0
   }
@@ -23,8 +31,8 @@ nodes {
     w: 1.0
   }
   scale {
-    x: 3.740214
-    y: 2.902938
+    x: 1.0
+    y: 1.0
     z: 1.0
     w: 1.0
   }
@@ -42,10 +50,9 @@ nodes {
   }
   type: TYPE_TEXT
   blend_mode: BLEND_MODE_ALPHA
-  text: "Here should be displayed screen with dialogue and it\'s items.\n"
-  "Press any button to go back to main menu!"
-  font: "system_font"
-  id: "level_done_text"
+  text: "junk gathered: 000"
+  font: "retro_gaming"
+  id: "junk_score"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
   pivot: PIVOT_CENTER
@@ -63,7 +70,7 @@ nodes {
   }
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
-  layer: ""
+  layer: "score"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -75,6 +82,136 @@ nodes {
   enabled: true
   visible: true
   material: ""
+}
+nodes {
+  position {
+    x: 480.0
+    y: 320.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.5
+    y: 1.8
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_BOX
+  blend_mode: BLEND_MODE_ALPHA
+  texture: "ui/gameover"
+  id: "background"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  adjust_mode: ADJUST_MODE_FIT
+  layer: "bg"
+  inherit_alpha: true
+  slice9 {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 0.0
+  }
+  clipping_mode: CLIPPING_MODE_NONE
+  clipping_visible: true
+  clipping_inverted: false
+  alpha: 1.0
+  template_node_child: false
+  size_mode: SIZE_MODE_AUTO
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+nodes {
+  position {
+    x: 480.0
+    y: 304.0
+    z: 0.0
+    w: 1.0
+  }
+  rotation {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+  }
+  scale {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+    z: 0.0
+    w: 1.0
+  }
+  color {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  type: TYPE_TEXT
+  blend_mode: BLEND_MODE_ALPHA
+  text: "enemies killed: 000"
+  font: "retro_gaming"
+  id: "enemy_score"
+  xanchor: XANCHOR_NONE
+  yanchor: YANCHOR_NONE
+  pivot: PIVOT_CENTER
+  outline {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  shadow {
+    x: 1.0
+    y: 1.0
+    z: 1.0
+    w: 1.0
+  }
+  adjust_mode: ADJUST_MODE_FIT
+  line_break: false
+  layer: "score"
+  inherit_alpha: true
+  alpha: 1.0
+  outline_alpha: 1.0
+  shadow_alpha: 1.0
+  template_node_child: false
+  text_leading: 1.0
+  text_tracking: 0.0
+  custom_type: 0
+  enabled: true
+  visible: true
+  material: ""
+}
+layers {
+  name: "bg"
+}
+layers {
+  name: "score"
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT

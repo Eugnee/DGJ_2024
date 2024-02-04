@@ -1,12 +1,16 @@
+shared_table = require "main.shared_table"
+
 function init(self)
 	-- Add initialization code here
 	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
 	msg.post(".", "acquire_input_focus")
+	print("level done loaded!")
 end
 
 function on_input(self, action_id, action)
 	if action_id ~= nil and action.pressed then
+		print("need to switch back to main level...")
 		msg.post('main:/controller#menu_controller', 'load_level', { level = 'main_menu_proxy' })
 	end
 	-- Add input-handling code here. The game object this script is attached to

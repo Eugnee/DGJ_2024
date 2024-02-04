@@ -1,0 +1,13 @@
+shared_table = require "main.shared_table"
+
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	local score = shared_table.get_value(2)
+	local junk_score_node = gui.get_node("junk_score")
+	local kills = shared_table.get_value(3)
+	local enemy_score_node = gui.get_node("enemy_score")
+	gui.set_text(junk_score_node, "junk gathered: "..tostring(score))
+	gui.set_text(enemy_score_node, "enemies killed: "..tostring(kills))
+end

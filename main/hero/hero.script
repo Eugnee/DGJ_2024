@@ -61,6 +61,8 @@ function init(self)
     self.inertia_acceleration = self.acceleration_count
     self.inertia_count = self.speed
     shared_table.add_value(self.direction)
+    shared_table.add_value(0)
+    shared_table.add_value(0)
 end
 
 function final()
@@ -238,5 +240,6 @@ function on_message(self, message_id, message, sender)
     elseif message_id == M.SCORE then
         self.player_score = self.player_score + message.score
         print("player_score: "..tostring(self.player_score))
+        shared_table.alter_value(2, self.player_score)
     end
 end

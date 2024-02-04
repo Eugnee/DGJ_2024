@@ -6,6 +6,8 @@ local T = {}
 
 -- shared table:
 -- idx 1 == hero.direction
+-- idx 2 == hero.player_score
+-- idx 3 == hero.enemies_killed
 local shared = {}
 
 function T.alter_value(idx, value)
