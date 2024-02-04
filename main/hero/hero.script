@@ -12,6 +12,8 @@ go.property("dialogue_lock", false)
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
+shared_table = require "main.shared_table"
+
 local Animate = require "main.lib.animation"
 local Position = require "main.lib.position"
 local Utils = require "main.lib.utils"
@@ -60,6 +62,7 @@ function init(self)
     self.acceleration_count = self.speed / 10
     self.inertia_acceleration = self.acceleration_count
     self.inertia_count = self.speed
+    shared_table.add_value(self.direction)
 end
 
 function final()
@@ -126,13 +129,14 @@ end
 ---@param self Hero
 ---@param dt float
 function update(self, dt)
+    local rotation = go.get_rotation()
+    shared_table.alter_value(1, rotation)
     if self.dialogue_lock then
         return
     end
 
     if self.is_moved then
         local pos = go.get_position()
-        local rotation = go.get_rotation()
         if self.direction.x ~= 0 then
             if self.direction.x > 0 then
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)

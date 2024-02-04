@@ -4,6 +4,8 @@
 -- in any script using the functions.
 local T = {}
 
+-- shared table:
+-- idx 1 == hero.direction
 local shared = {}
 
 function T.alter_value(idx, value)
