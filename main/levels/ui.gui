@@ -79,7 +79,7 @@ nodes {
   position {
     x: 480.0
     y: 120.0
-    z: 1.0
+    z: 0.5
     w: 1.0
   }
   rotation {
@@ -122,7 +122,7 @@ nodes {
     z: 0.0
     w: 0.0
   }
-  clipping_mode: CLIPPING_MODE_STENCIL
+  clipping_mode: CLIPPING_MODE_NONE
   clipping_visible: true
   clipping_inverted: false
   alpha: 1.0
@@ -136,8 +136,8 @@ nodes {
 nodes {
   position {
     x: -128.0
-    y: -117.0
-    z: 0.0
+    y: -120.0
+    z: 0.3
     w: 1.0
   }
   rotation {
@@ -195,7 +195,7 @@ nodes {
 nodes {
   position {
     x: 128.0
-    y: -117.0
+    y: -120.0
     z: 0.0
     w: 1.0
   }
@@ -305,7 +305,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
   parent: "dialogue_ui"
-  layer: "characters"
+  layer: "dialogue"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -372,7 +372,7 @@ nodes {
   adjust_mode: ADJUST_MODE_FIT
   line_break: true
   parent: "dialogue_ui"
-  layer: "characters"
+  layer: "dialogue"
   inherit_alpha: true
   alpha: 1.0
   outline_alpha: 1.0
@@ -386,10 +386,10 @@ nodes {
   material: ""
 }
 layers {
-  name: "dialogue"
+  name: "characters"
 }
 layers {
-  name: "characters"
+  name: "dialogue"
 }
 layers {
   name: "frame"
