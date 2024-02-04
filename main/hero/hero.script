@@ -124,6 +124,8 @@ local function simple_inertia(self, dt)
     end
 end
 
+local game_ended = false
+
 ---@param self Hero
 ---@param dt float
 function update(self, dt)
@@ -131,6 +133,13 @@ function update(self, dt)
     shared_table.alter_value(1, rotation)
     if self.is_moved then
         local pos = go.get_position()
+        if pos.y > 10000 and not game_ended then
+            print("sending endgame dialogue")
+            -- level ended
+            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 5, max_switches = 1, hero_starts = true })
+            game_ended = true
+            return
+        end
         if self.direction.x ~= 0 then
             if self.direction.x > 0 then
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)

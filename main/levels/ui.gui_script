@@ -4,6 +4,7 @@ local DIALOGUE_ON = 2
 local DIALOGUE_OFF = 3
 local d_state = DIALOGUE_OFF
 local left_line = true
+local end_game = false
 local hero_id = "level1:/instance0"
 
 local startup_dialogue = {
@@ -27,11 +28,16 @@ local pirate_dies2 = {
 	"Was it Logitech F710?"
 }
 
+local end_dialogue = {
+	"Ok, I got away from those pirates! Let's see what we got..."
+}
+
 local dialogues = {
 	startup_dialogue, 
 	pirate_dies0,
 	pirate_dies1,
-	pirate_dies2
+	pirate_dies2,
+	end_dialogue
 }
 
 function init(self)
@@ -51,6 +57,9 @@ function animate_end()
 		d_state = DIALOGUE_OFF
 		-- send message second time to fully unlock player
 		msg.post(hero_id, M.UNLOCK_DIALOGUE)
+		if end_game then
+			msg.post(M.GAME_CONTROLLER, hash("load_level"), { level = "main_menu" })
+		end
 	end
 	print("animate done")
 end
@@ -63,6 +72,9 @@ function on_message(self, message_id, message, sender)
 			d_state = DIALOGUE_OPENING
 			-- dialogue starts from left line
 			self.dialogue = dialogues[message.dialogue_id]
+			if message.dialogue_id == 5 then
+				end_game = true
+			end
 			if message.dialogue_id > 1 then
 				local char_right = gui.get_node("char_right")
 				anim_id = message.dialogue_id - 1
