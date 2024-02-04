@@ -28,6 +28,11 @@ local pirate_dies2 = {
 	"Was it Logitech F710?"
 }
 
+local pirate_dies3 = {
+	"My gorgeous hair!",
+	"Say hello to the Davy Jones!"
+}
+
 local end_dialogue = {
 	"Ok, I got away from those pirates! Let's see what we got..."
 }
@@ -37,6 +42,7 @@ local dialogues = {
 	pirate_dies0,
 	pirate_dies1,
 	pirate_dies2,
+	pirate_dies3,
 	end_dialogue
 }
 
@@ -72,15 +78,12 @@ function on_message(self, message_id, message, sender)
 			d_state = DIALOGUE_OPENING
 			-- dialogue starts from left line
 			self.dialogue = dialogues[message.dialogue_id]
-			if message.dialogue_id == 5 then
+			if message.dialogue_id == 6 then
 				end_game = true
 			end
-			if message.dialogue_id > 1 then
+			if message.dialogue_id > 1 and message.dialogue_id < 6 then
 				local char_right = gui.get_node("char_right")
 				anim_id = message.dialogue_id - 1
-				if anim_id > 3 then
-					anim_id = 3
-				end
 				gui.play_flipbook(char_right, "character_"..tostring(anim_id))
 			end
 			self.curr_switches = 1

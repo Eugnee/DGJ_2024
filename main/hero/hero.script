@@ -138,7 +138,7 @@ function update(self, dt)
         if pos.y > 10000 and not game_ended then
             print("sending endgame dialogue")
             -- level ended
-            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 5, max_switches = 1, hero_starts = true })
+            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 6, max_switches = 1, hero_starts = true })
             game_ended = true
             return
         end
