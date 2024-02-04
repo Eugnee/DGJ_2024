@@ -8,9 +8,8 @@ local end_game = false
 local hero_id = "level1:/instance0"
 
 local startup_dialogue = {
-	"Another day collecting space junk...",
-	"This is our junk, get out of here!",
-	"We'll see about that, sweetheart."
+	"I must inform you to use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
+	"Yeah.. You tell me this everyday. I know the drill."
 }
 
 local pirate_dies0 = {
@@ -81,10 +80,12 @@ function on_message(self, message_id, message, sender)
 			if message.dialogue_id == 6 then
 				end_game = true
 			end
+			local char_right = gui.get_node("char_right")
 			if message.dialogue_id > 1 and message.dialogue_id < 6 then
-				local char_right = gui.get_node("char_right")
 				anim_id = message.dialogue_id - 1
 				gui.play_flipbook(char_right, "character_"..tostring(anim_id))
+			elseif message.dialogue_id == 1 then
+				gui.play_flipbook(char_right, "character_3")
 			end
 			self.curr_switches = 1
 			self.max_switches = message.max_switches

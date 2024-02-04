@@ -67,7 +67,7 @@ function init(self)
     end
 
     -- level starts from dialogue
-    msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 3, hero_starts = true })
+    msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 2, hero_starts = false })
 end
 
 
