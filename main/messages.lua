@@ -33,6 +33,7 @@ M.UNLOAD = hash("unload")
 M.GAME_OVER = hash("game_over")
 M.RESTART = hash("restart")
 M.START_GAME = hash("start_game")
+M.GAME_CONTROLLER = msg.url("game:/levels#game_controller")
 
 -- INPUT
 M.ACQUIRE_INPUT_FOCUS = "acquire_input_focus"

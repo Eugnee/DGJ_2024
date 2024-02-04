@@ -1,0 +1,12 @@
+local fabrics = require "main.levels.level_base.fabrics"
+
+go.property("hero_id", hash(""))
+
+
+function init(self)
+    print("loading leve1")
+    for i = 0, 3 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0)
+        fabrics.create_pirat(self.hero_id, pos)
+    end
+end

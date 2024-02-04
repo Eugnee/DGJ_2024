@@ -1,15 +1,16 @@
 local MAP_HEIGHT = 1024
 local MAP_WIDTH = 920
 local BG_Y_RANGE = 561
+
 debugdraw = require "debug-draw.debug-draw"
 
-
+local fabrics = require "main.levels.level_base.fabrics"
 shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
 ---@param self any
-local function init_backgrounds(self, camera_id)
+local function init_backgrounds(self)
     self.bg_middle = {
         factory.create("factories#background_factory1"),
         factory.create("factories#background_factory2"),
@@ -65,9 +66,7 @@ end
 function init(self)
     shared_table.add_value("hello")
     math.randomseed(os.time())
-    self.hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
-        { bullet_url = msg.url("factories#bullet"), explosion_url = msg.url("factories#explosion") }
-    )
+    self.hero_id = fabrics.create_hero()
     msg.post("camera", "follow", {
         target = self.hero_id,
         lerp = 0.7,
@@ -80,21 +79,12 @@ function init(self)
         "bounds",
         { left = -MAP_WIDTH / 2, right = MAP_WIDTH / 2, bottom = -MAP_HEIGHT, top = MAP_HEIGHT * 10 }
     )
-    local camera_id = go.get_id("camera")
-    init_backgrounds(self, camera_id)
-
-    -- creating some enemies just for testing
-    for i = 0, 3 do
-        local enemy_id = factory.create("factories#pirat",
-            go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0), nil,
-            {
-                hero_id = self.hero_id,
-                bullet_url = msg.url("factories#enemy_bullet"),
-                explosion_url = msg.url(
-                    "factories#explosion")
-            })
-    end
+    print("loading base")
     init_backgrounds(self)
+
+    -- passing all information on start from base to other leve here
+    -- maybe better to create level scripts as collection also
+    factory.create("/level#factory", nil, nil, { hero_id = self.hero_id })
 end
 
 function update(self)
