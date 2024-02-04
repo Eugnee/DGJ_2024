@@ -1,0 +1,22 @@
+local hero_id = "level1:/instance0"
+local score_table = { 5, 6, 7, 8, 9, 10, 15 }
+
+function init(self)
+	self.rotation = go.get_rotation()
+	self.rotation_speed = math.random(-3, 3)
+	local sprite_id = math.random(0, 6)
+	msg.post("#junk_sprite", "play_animation", { id = hash("junk"..tostring(sprite_id))})
+	self.score = score_table[sprite_id + 1]
+end
+
+function update(self, dt)
+	self.rotation = self.rotation * vmath.quat_rotation_z(self.rotation_speed * dt)
+	go.set_rotation(self.rotation)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == M.TRIGGER_RESPONSE then
+		go.delete()
+		msg.post(hero_id, M.SCORE, { score = self.score })
+	end
+end

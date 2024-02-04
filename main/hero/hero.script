@@ -5,6 +5,7 @@ go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
 go.property("explosion_url", msg.url())
 go.property("angular_velocity", 2)
+go.property("player_score", 0)
 
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
@@ -225,5 +226,8 @@ function on_message(self, message_id, message, sender)
     elseif message_id == M.MAKE_DAMAGE then
         take_damage(self, message.hp)
         return
+    elseif message_id == M.SCORE then
+        self.player_score = self.player_score + message.score
+        print("player_score: "..tostring(self.player_score))
     end
 end
