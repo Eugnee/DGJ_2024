@@ -1,7 +1,8 @@
 local EXP_ANIM = hash("exp")
 
 function init()
-    sprite.play_flipbook(C.SPRITE, EXP_ANIM, function()
+    sprite.play_flipbook(C.SPRITE, EXP_ANIM)
+    timer.delay(C.DEAD_ANIMATION_DELAY, false, function()
         go.delete()
     end)
 end

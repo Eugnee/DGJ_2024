@@ -93,9 +93,9 @@ embedded_components {
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
   position {
-    x: 0.0
+    x: 1.0
     y: 0.0
-    z: 0.1
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -114,8 +114,8 @@ embedded_components {
   ""
   position {
     x: 0.0
-    y: 0.0
-    z: 0.1
+    y: -4.0
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -133,9 +133,9 @@ embedded_components {
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
   position {
-    x: 0.0
+    x: -2.0
     y: 0.0
-    z: 0.1
+    z: 0.0
   }
   rotation {
     x: 0.0
@@ -155,7 +155,7 @@ embedded_components {
   position {
     x: 0.0
     y: 0.0
-    z: 0.2
+    z: 0.1
   }
   rotation {
     x: 0.0

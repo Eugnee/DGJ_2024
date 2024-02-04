@@ -16,6 +16,7 @@ C.SPRITE_DAMAGED = "#damaged"
 C.SPRITE_FIRE_SIDE_RIGHT = "#fire_side_right"
 C.SPRITE_FIRE_SIDE_LEFT = "#fire_side_left"
 C.SPRITE_FIRE_FRONT = "#fire_front"
+C.DEAD_ANIMATION_DELAY = 0.25
 
 -- COLLISION GROUPS
 C.HERO = hash("hero")
