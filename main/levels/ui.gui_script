@@ -30,7 +30,7 @@ local pirate_dies2 = {
 
 local pirate_dies3 = {
 	"My gorgeous hair!",
-	"Say hello to the Davy Jones!"
+	"Say hello to Davy Jones!"
 }
 
 local end_dialogue = {

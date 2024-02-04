@@ -11,14 +11,15 @@ end
 ---@param hero_id hash
 ---@param position vector3
 ---@return hash
-function Fabrics.create_pirat(hero_id, position)
+function Fabrics.create_pirat(hero_id, position, pirate_id)
     return factory.create("/base/factories#pirat",
         position, nil,
         {
             hero_id = hero_id,
             bullet_url = msg.url("/base/factories#enemy_bullet"),
             explosion_url = msg.url(
-                "/base/factories#explosion")
+            "/base/factories#explosion"),
+            pirate_id = pirate_id
         })
 end
 

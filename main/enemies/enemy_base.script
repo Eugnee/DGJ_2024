@@ -8,6 +8,7 @@ go.property("bullet_url", msg.url())
 go.property("explosion_url", msg.url())
 go.property("bullet_speed", 800)
 
+go.property("pirate_id", 1)
 shared_table = require "main.shared_table"
 
 local Animate = require "main.lib.animation"
@@ -61,7 +62,7 @@ function get_damage(self, hp)
     end
     self.hp = self.hp - hp
     if self.hp <= 0 then
-        msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = math.random(2, 4), max_switches = 2, hero_starts = false })
+        msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = self.pirate_id, max_switches = 2, hero_starts = false })
         local curr_score = shared_table.get_value(3)
         curr_score = curr_score + 1
         shared_table.alter_value(3, curr_score)
