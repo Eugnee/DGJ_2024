@@ -7,10 +7,19 @@ function init(self)
 	self.parallax_move = vmath.vector3(0, 0, 0)
 end
 
+local test_shared = true
+shared_table = require "main.shared_table"
+
 function update(self, dt)
 	local pos = go.get_position(self.camera_id)
 	local dir = vmath.vector3(0, -1, 0)
 	self.parallax_move = self.parallax_move + dir * dt * self.parallax_speed
 	pos = pos + self.parallax_move
 	go.set_position(pos)
+
+	if test_shared then
+		local shared_data = shared_table.get_value(1)
+		print(shared_data)
+		test_shared = false
+	end
 end

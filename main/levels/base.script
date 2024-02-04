@@ -3,6 +3,8 @@ local MAP_WIDTH = 920
 local BG_Y_RANGE = 561
 debugdraw = require "debug-draw.debug-draw"
 
+
+shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
@@ -61,6 +63,7 @@ local function swap_backgrounds(self, dir, bg_level)
 end
 
 function init(self)
+    shared_table.add_value("hello")
     math.randomseed(os.time())
     self.hero_id = factory.create("factories#hero", vmath.vector3(1, 1, C.OBECTS_Z_INDEX), nil,
         { bullet_url = msg.url("factories#bullet"), explosion_url = msg.url("factories#explosion") }
