@@ -9,4 +9,61 @@ function init(self)
         local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0)
         fabrics.create_pirat(self.hero_id, pos)
     end
+
+    -- first batch close
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0)
+        fabrics.create_junk(self.hero_id, pos)
+    end
+    local junk_offset = vmath.vector3(0, 500, 0)
+    
+    -- next batch further
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+    junk_offset.y = 1400
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+    junk_offset.y = 3600
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+    junk_offset.y = 4000
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+
+    junk_offset.y = 4800
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+
+    junk_offset.y = 7600
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
+
+    junk_offset.y = 8400
+    -- so on...
+    for i = 0, 10 do
+        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        fabrics.create_junk(self.hero_id, pos)
+    end
 end

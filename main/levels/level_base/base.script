@@ -80,19 +80,6 @@ function init(self)
         { left = -MAP_WIDTH / 2, right = MAP_WIDTH / 2, bottom = -MAP_HEIGHT, top = MAP_HEIGHT * 10 }
     )
     print("loading base")
-    -- creating some enemies just for testing
-    for i = 0, 3 do
-
-        local junk_id = factory.create(
-            "factories#junk",
-            go.get_position(self.hero_id) 
-            + vmath.vector3(
-                math.random(300, 600), 
-                math.random(300, 600), 
-                0
-            )
-        )
-    end
     init_backgrounds(self)
 
     -- passing all information on start from base to other leve here

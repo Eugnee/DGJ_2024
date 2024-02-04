@@ -23,3 +23,6 @@ debug = 0
 [tilemap]
 max_tile_count = 4096
 
+[sprite]
+max_count = 1024
+

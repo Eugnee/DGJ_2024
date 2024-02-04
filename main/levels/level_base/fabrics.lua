@@ -22,4 +22,9 @@ function Fabrics.create_pirat(hero_id, position)
         })
 end
 
+function Fabrics.create_junk(hero_id, position)
+    return factory.create("/base/factories#junk", position)
+end
+    
+
 return Fabrics
