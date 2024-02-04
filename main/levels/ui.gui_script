@@ -58,7 +58,7 @@ function animate_end()
 		-- send message second time to fully unlock player
 		msg.post(hero_id, M.UNLOCK_DIALOGUE)
 		if end_game then
-			msg.post(M.GAME_CONTROLLER, hash("load_level"), { level = "main_menu" })
+			msg.post(M.GAME_CONTROLLER, "load_level", { level = 'level_done' })
 		end
 	end
 	print("animate done")
