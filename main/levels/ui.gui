@@ -166,7 +166,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "ui/character_2"
+  texture: "ui/character_0"
   id: "char_left"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE

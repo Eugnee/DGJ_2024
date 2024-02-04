@@ -2,7 +2,6 @@ local fabrics = require "main.levels.level_base.fabrics"
 
 go.property("hero_id", hash(""))
 
-
 function init(self)
     print("loading leve1")
     for i = 0, 3 do
@@ -66,4 +65,11 @@ function init(self)
         local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
+
+    -- level starts from dialogue
+    msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 3, hero_starts = true })
 end
+
+
+
+

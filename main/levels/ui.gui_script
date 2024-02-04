@@ -6,12 +6,42 @@ local d_state = DIALOGUE_OFF
 local left_line = true
 local hero_id = "level1:/instance0"
 
+local startup_dialogue = {
+	"Another day collecting space junk...",
+	"This is our junk, get out of here!",
+	"We'll see about that, sweetheart."
+}
+
+local pirate_dies0 = {
+	"Noooo! This was my grandmother's ship!",
+	"..."
+}
+
+local pirate_dies1 = {
+	"And they call US pirates.",
+	"You do steal games, don't you?"
+}
+
+local pirate_dies2 = {
+	"Bloody controller, why did it need to stick?",
+	"Was it Logitech F710?"
+}
+
+local dialogues = {
+	startup_dialogue, 
+	pirate_dies0,
+	pirate_dies1,
+	pirate_dies2
+}
+
 function init(self)
 	print("UI initialized")
 	self.left_line = gui.get_node("text_left")
 	self.right_line = gui.get_node("text_right")
 	self.max_switches = 3
 	self.curr_swicth = 0
+	self.start_left = true
+	self.dialogue = dialogues[1]
 end
 
 function animate_end()
@@ -32,10 +62,29 @@ function on_message(self, message_id, message, sender)
 			gui.animate(d_ui, "position.y", 320, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			d_state = DIALOGUE_OPENING
 			-- dialogue starts from left line
-			gui.set_visible(self.left_line, true)
-			gui.set_visible(self.right_line, false)
-			left_line = false
+			self.dialogue = dialogues[message.dialogue_id]
+			if message.dialogue_id > 1 then
+				local char_right = gui.get_node("char_right")
+				anim_id = message.dialogue_id - 1
+				if anim_id > 3 then
+					anim_id = 3
+				end
+				gui.play_flipbook(char_right, "character_"..tostring(anim_id))
+			end
 			self.curr_switches = 1
+			self.max_switches = message.max_switches
+			self.start_left = message.hero_starts
+			if self.start_left then
+				gui.set_visible(self.left_line, true)
+				gui.set_visible(self.right_line, false)
+				left_line = false
+				gui.set_text(self.left_line, self.dialogue[self.curr_switches])
+			else
+				gui.set_visible(self.left_line, false)
+				gui.set_visible(self.right_line, true)
+				left_line = true
+				gui.set_text(self.right_line, self.dialogue[self.curr_switches])
+			end
 		elseif d_state == DIALOGUE_ON then
 			local d_ui = gui.get_node("dialogue_ui")
 			gui.animate(d_ui, "position.y", 120, gui.EASING_OUTSINE, 1.5, 0, animate_end)
@@ -51,10 +100,12 @@ function on_message(self, message_id, message, sender)
 			if left_line then
 				gui.set_visible(self.left_line, true)
 				gui.set_visible(self.right_line, false)
+				gui.set_text(self.left_line, self.dialogue[self.curr_switches])
 				left_line = false
 			else
 				gui.set_visible(self.left_line, false)
 				gui.set_visible(self.right_line, true)
+				gui.set_text(self.right_line, self.dialogue[self.curr_switches])
 				left_line = true
 			end
 		end
