@@ -92,7 +92,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash("toggle_dialogue") then
 		if d_state == DIALOGUE_OFF then
 			local d_ui = gui.get_node("dialogue_ui")
-			gui.animate(d_ui, "position.y", 320, gui.EASING_OUTSINE, 1.5, 0, animate_end)
+			gui.animate(d_ui, "position.y", 300, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			sound.play("#dialog_on")
 			d_state = DIALOGUE_OPENING
 			-- dialogue starts from left line
