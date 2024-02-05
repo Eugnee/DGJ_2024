@@ -12,11 +12,26 @@ components {
     z: 0.0
     w: 1.0
   }
+  properties {
+    id: "hp"
+    value: "100.0"
+    type: PROPERTY_TYPE_NUMBER
+  }
+  properties {
+    id: "speed"
+    value: "300.0"
+    type: PROPERTY_TYPE_NUMBER
+  }
+  properties {
+    id: "damage"
+    value: "70.0"
+    type: PROPERTY_TYPE_NUMBER
+  }
 }
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/pirate.tilesource\"\n"
+  data: "tile_set: \"/main/enemies/alien.tilesource\"\n"
   "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
@@ -63,8 +78,8 @@ embedded_components {
   "    index: 0\n"
   "    count: 3\n"
   "  }\n"
-  "  data: 16.0\n"
-  "  data: 16.0\n"
+  "  data: 9.0\n"
+  "  data: 21.0\n"
   "  data: 10.0\n"
   "}\n"
   "linear_damping: 0.0\n"
@@ -134,7 +149,7 @@ embedded_components {
 embedded_components {
   id: "fire"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/pirate_fire.tilesource\"\n"
+  data: "tile_set: \"/main/enemies/alien_fire.tilesource\"\n"
   "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

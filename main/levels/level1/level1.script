@@ -18,6 +18,13 @@ function init(self)
         timer.trigger(enemy_creator)
     end)
 
+    timer.delay(60, true, function()
+        for i = 0, random(2) do
+            local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
+            fabrics.create_alien(self.hero_id, pos, i + 2)
+        end
+    end)
+
     -- first batch close
     for i = 0, 10 do
         local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0)
