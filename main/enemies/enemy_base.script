@@ -67,9 +67,10 @@ function get_damage(self, hp)
     if self.hp <= 0 then
         local rand = math.random(7)
         if rand >= 5 then
-            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = self.pirate_id, max_switches = 2, hero_starts = false })
+            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"),
+                { dialogue_id = self.pirate_id, max_switches = 2, hero_starts = false })
         end
-        local curr_score = shared_table.get_value(3)
+        local curr_score = shared_table.get_value(3) or 0
         curr_score = curr_score + 1
         shared_table.alter_value(3, curr_score)
         -- msg.post("/main#main", M.INCR_MONSTETS_COUNT)
@@ -115,18 +116,17 @@ function update(self, dt)
         if v then
             if not go.exists(nearby_id) then
                 self.nearby[nearby_id] = false
-                goto continue
-            end
-            local nearby_pos = go.get_position(nearby_id)
-            local distance = Utils.distance_to(pos, nearby_pos)
-            local angle = Utils.angle_to(pos, nearby_pos)
-            if not nearby or distance < nearby_distance then
-                nearby = nearby_id
-                nearby_distance = distance
-                nearby_angle = angle
+            else
+                local nearby_pos = go.get_position(nearby_id)
+                local distance = Utils.distance_to(pos, nearby_pos)
+                local angle = Utils.angle_to(pos, nearby_pos)
+                if not nearby or distance < nearby_distance then
+                    nearby = nearby_id
+                    nearby_distance = distance
+                    nearby_angle = angle
+                end
             end
         end
-        ::continue::
     end
 
     -- adjust target angle to avoid nearby enemy

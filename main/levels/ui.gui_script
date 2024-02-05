@@ -11,6 +11,9 @@ shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
+shared_table.alter_value(2, 0)
+shared_table.alter_value(4, 500)
+
 local startup_dialogue = {
 	"I must inform you to use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
 	"Yeah.. You tell me this everyday. I know the drill."
@@ -121,6 +124,7 @@ function on_message(self, message_id, message, sender)
 				left_line = true
 				gui.set_text(self.right_line, self.dialogue[self.curr_switches])
 			end
+			self.block_input = false
 		elseif d_state == DIALOGUE_ON then
 			local d_ui = gui.get_node("dialogue_ui")
 			sound.play("#dialog_off")
@@ -132,6 +136,7 @@ function on_message(self, message_id, message, sender)
 		if self.curr_switches >= self.max_switches then
 			msg.post(".", "toggle_dialogue")
 			self.curr_switches = 0
+			self.block_input = true
 		else
 			self.curr_switches = self.curr_switches + 1
 			if left_line then
@@ -150,8 +155,10 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	if self.block_input then
+		return
+	end
 	if ((action_id == C.TALK or action_id == C.FIRE or action_id == hash("touch")) and action.pressed) then
 		msg.post(".", "next_line")
 	end
-	return true
 end
