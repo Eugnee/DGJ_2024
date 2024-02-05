@@ -81,8 +81,10 @@ function init(self)
         10, 
         true, 
         function ()
-            local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-480, 480), 400, 0)
-            fabrics.create_meteor(pos)
+            for i = 0, 2 do
+                local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-480, 480), math.random(330, 400), 0)
+                fabrics.create_meteor(pos)
+            end
         end
     )
     
