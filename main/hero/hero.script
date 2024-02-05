@@ -1,5 +1,5 @@
 go.property("hp", 500)
-go.property("speed", 1300)
+go.property("speed", 300)
 go.property("damage", 50)
 go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
