@@ -26,6 +26,10 @@ end
 function Fabrics.create_junk(hero_id, position)
     return factory.create("/base/factories#junk", position)
 end
+
+function Fabrics.create_meteor(position)
+    return factory.create("/base/factories#meteor", position)
+end
     
 
 return Fabrics

@@ -27,6 +27,7 @@ embedded_components {
   "mask: \"enemy_bullet\"\n"
   "mask: \"enemy_nearby\"\n"
   "mask: \"junk\"\n"
+  "mask: \"meteor\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

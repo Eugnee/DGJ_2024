@@ -75,8 +75,25 @@ function init(self)
 
     -- level starts from dialogue
     msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 2, hero_starts = false })
-end
 
+    -- randomly create meteor
+    local meteor_creator = timer.delay(
+        10, 
+        true, 
+        function ()
+            local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-480, 480), 400, 0)
+            fabrics.create_meteor(pos)
+        end
+    )
+    
+    timer.delay(
+        5, 
+        false, 
+        function ()
+            timer.trigger(meteor_creator)
+        end
+    )
+end
 
 
 

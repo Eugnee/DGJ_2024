@@ -45,6 +45,7 @@ embedded_components {
   "mask: \"bullet\"\n"
   "mask: \"enemy\"\n"
   "mask: \"hero\"\n"
+  "mask: \"meteor\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
   "    shape_type: TYPE_BOX\n"

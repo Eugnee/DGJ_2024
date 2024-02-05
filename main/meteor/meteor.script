@@ -1,0 +1,23 @@
+function init(self)
+	-- Add initialization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+	self.speed = 100
+	self.damage = 10
+end
+
+function update(self, dt)
+	-- Move straight down
+	local pos = go.get_position()
+	pos = pos + vmath.vector3(0, -1, 0) * self.speed * dt
+	go.set_position(pos)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == M.TRIGGER_RESPONSE then
+		-- send damage to target
+		msg.post(message.other_id, M.MAKE_DAMAGE, { hp = self.damage })
+		-- delete meteor
+		go.delete()
+	end
+end

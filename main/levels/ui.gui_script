@@ -81,8 +81,7 @@ function update(self, dt)
 
 	local hp_display = gui.get_node("hp_display")
 	local hp = shared_table.get_value(4)
-	hp = hp / 50 + 1
-	print(hp)
+	hp = math.floor(hp / 50) + 1
 	if hp < 1 then
 		hp = 1
 	end
