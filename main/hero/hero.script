@@ -114,7 +114,7 @@ end
 ---@param dt float
 local function simple_inertia(self, dt)
     if self.inertia_count < self.speed then
-        if self.inertia_count == 1 then
+        if self.inertia_count == 0.9 then
             msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_stab" })
         end
         local rotation = go.get_rotation()
@@ -131,7 +131,7 @@ local function simple_inertia(self, dt)
             pos = pos + direction
             Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
         end
-        self.inertia_count = self.inertia_count + 0.1
+        self.inertia_count = self.inertia_count + 0.05
         return
     end
 end
@@ -198,7 +198,7 @@ function update(self, dt)
         self.acceleration_count = self.speed / 10
         if self.run_inertia then
             self.run_inertia = false
-            self.inertia_count = 1
+            self.inertia_count = 0.9
             msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
