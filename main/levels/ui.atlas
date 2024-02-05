@@ -58,6 +58,10 @@ images {
   image: "/images/gameover-yougotallthejunkandwon.png"
   sprite_trim_mode: SPRITE_TRIM_MODE_OFF
 }
+images {
+  image: "/images/gameover-youwerefired.png"
+  sprite_trim_mode: SPRITE_TRIM_MODE_OFF
+}
 margin: 0
 extrude_borders: 2
 inner_padding: 0

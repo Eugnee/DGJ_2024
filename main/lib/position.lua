@@ -20,8 +20,11 @@ function position.correct_position(obj, message)
         if (proj < 1) then
             local comp = (message.distance - message.distance * proj) *
                 message.normal;
-            position.set_iso_position(go.get_position() + comp, C.OBECTS_Z_INDEX)
-            obj.correction = obj.correction + comp;
+            local new_pos = go.get_position() + comp
+            if check_if_in_bounds(new_pos) then
+                position.set_iso_position(new_pos, C.OBECTS_Z_INDEX)
+                obj.correction = obj.correction + comp;
+            end
         end
     end
 end

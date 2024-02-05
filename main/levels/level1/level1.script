@@ -23,7 +23,7 @@ function init(self)
         end
     end)
 
-    timer.delay(15, true, function()
+    timer.delay(11, true, function()
         local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
         for i = 0, random(2) do
             fabrics.create_medkit(pos)

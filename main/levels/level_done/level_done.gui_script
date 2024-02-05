@@ -12,8 +12,10 @@ function init(self)
 	local junk_quota_noda = gui.get_node("junk_quota")
 	local limit = shared_table.get_value(shared_table.JUNK_QUOTA)
 	limit = math.ceil(limit - limit * 0.25)
-	if hp < 0 or score < limit then
+	if hp < 0 then
 		gui.play_flipbook(background, "gameover-youdied")
+	elseif score < limit then
+		gui.play_flipbook(background, "gameover-youwerefired")
 	else
 		gui.play_flipbook(background, "gameover-yougotallthejunkandwon")
 	end
