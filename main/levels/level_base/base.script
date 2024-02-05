@@ -5,7 +5,7 @@ local BG_Y_RANGE = 561
 debugdraw = require "debug-draw.debug-draw"
 
 local fabrics = require "main.levels.level_base.fabrics"
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
@@ -74,7 +74,6 @@ local function swap_backgrounds(self, dir, bg_level)
 end
 
 function init(self)
-    -- shared_table.add_value("hello")
     math.randomseed(socket.gettime())
     self.hero_id = fabrics.create_hero()
     msg.post("camera", "follow", {

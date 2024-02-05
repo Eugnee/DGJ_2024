@@ -23,4 +23,18 @@ function T.add_value(value)
 	table.insert(shared, value)
 end
 
+T.HERO_ROTATION = 1
+T.HERO_JUNK_SCORE = 2
+T.HERO_KILLS_SCORE = 3
+T.HERO_HP = 4
+T.JUNK_QUOTA = 5
+T.GAME_END = 6
+
+T.add_value(vmath.vector4())
+T.add_value(0)
+T.add_value(0)
+T.add_value(500)
+T.add_value(0)
+T.add_value(false)
+
 return T

@@ -10,13 +10,13 @@ function init(self)
 end
 
 local test_shared = true
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 
 function update(self, dt)
 	local pos = go.get_position(self.camera_id)
 	local dir = vmath.vector3(0, -1, 0)
 	local test_dir = vmath.vector3(0, 1, 0)
-	local player_quat = shared_table.get_value(1)
+	local player_quat = shared_table.get_value(shared_table.HERO_ROTATION)
 
 	test_dir = vmath.rotate(player_quat, test_dir)
 	if test_dir.y < 0 then

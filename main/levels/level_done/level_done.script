@@ -1,4 +1,4 @@
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 
 function init(self)
 	-- Add initialization code here
@@ -7,9 +7,11 @@ function init(self)
 	msg.post(".", "acquire_input_focus")
 
 	timer.delay(5, false, function()
-		shared_table.alter_value(2, 0)
-		shared_table.alter_value(3, 0)
-		shared_table.alter_value(4, 500)
+		shared_table.alter_value(shared_table.HERO_JUNK_SCORE, 0)
+		shared_table.alter_value(shared_table.HERO_KILLS_SCORE, 0)
+		shared_table.alter_value(shared_table.HERO_HP, 500)
+		shared_table.alter_value(shared_table.JUNK_QUOTA, 0)
+		shared_table.alter_value(shared_table.GAME_END, false)
 		msg.post(M.GAME_CONTROLLER, 'load_level', { level = 'level1' })
 	end)
 end

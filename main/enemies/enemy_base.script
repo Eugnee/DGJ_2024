@@ -9,7 +9,7 @@ go.property("explosion_url", msg.url())
 go.property("bullet_speed", 800)
 
 go.property("pirate_id", 1)
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 
 local Animate = require "main.lib.animation"
 local Position = require "main.lib.position"
@@ -70,9 +70,9 @@ function get_damage(self, hp)
             msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"),
                 { dialogue_id = self.pirate_id, max_switches = 2, hero_starts = false })
         end
-        local curr_score = shared_table.get_value(3) or 0
+        local curr_score = shared_table.get_value(shared_table.HERO_KILLS_SCORE)
         curr_score = curr_score + 1
-        shared_table.alter_value(3, curr_score)
+        shared_table.alter_value(shared_table.HERO_KILLS_SCORE, curr_score)
         -- msg.post("/main#main", M.INCR_MONSTETS_COUNT)
         self.is_dead = true
         Animate.play_animation(self, C.SPRITE, DEAD_ANIM, true)

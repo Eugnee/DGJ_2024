@@ -1,11 +1,15 @@
 local hero_id = "level1:/instance0"
 
+local shared_table = require "main.shared_table"
+
 function init(self)
 	self.rotation = go.get_rotation()
 	self.rotation_speed = math.random(-3, 3)
 	local sprite_id = math.random(35)
 	msg.post("#junk_sprite", "play_animation", { id = hash(tostring(sprite_id)) })
 	self.score = sprite_id + math.random(10)
+	local quota = shared_table.get_value(shared_table.JUNK_QUOTA)
+	shared_table.alter_value(shared_table.JUNK_QUOTA, self.score + quota)
 end
 
 function update(self, dt)

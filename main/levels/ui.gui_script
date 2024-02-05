@@ -4,16 +4,11 @@ local DIALOGUE_ON = 2
 local DIALOGUE_OFF = 3
 local d_state = DIALOGUE_OFF
 local left_line = true
-local end_game = false
 local hero_id = "level1:/instance0"
 
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
-
-shared_table.alter_value(2, 0)
-shared_table.alter_value(3, 0)
-shared_table.alter_value(4, 500)
 
 local startup_dialogue = {
 	"I must inform you to use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
@@ -54,7 +49,6 @@ local dialogues = {
 }
 
 function init(self)
-	
 	self.left_line = gui.get_node("text_left")
 	self.right_line = gui.get_node("text_right")
 	self.max_switches = 3
@@ -63,33 +57,31 @@ function init(self)
 	self.dialogue = dialogues[1]
 end
 
-function animate_end()
+function animate_end(self)
 	if d_state == DIALOGUE_OPENING then
 		d_state = DIALOGUE_ON
 	elseif d_state == DIALOGUE_CLOSING then
 		d_state = DIALOGUE_OFF
 		-- send message second time to fully unlock player
 		msg.post(hero_id, M.UNLOCK_DIALOGUE)
-		if end_game then
+		if shared_table.get_value(shared_table.GAME_END) then
 			msg.post(M.GAME_CONTROLLER, "load_level", { level = 'level_done' })
 		end
 	end
-	
 end
 
 function update(self, dt)
 	local junk_score = gui.get_node("junk_score")
-	local score = shared_table.get_value(2)
+	local score = shared_table.get_value(shared_table.HERO_JUNK_SCORE)
 	gui.set_text(junk_score, tostring(score))
 
-
 	local hp_display = gui.get_node("hp_display")
-	local hp = shared_table.get_value(4)
+	local hp = shared_table.get_value(shared_table.HERO_HP)
 	hp = math.floor(hp / 50) + 1
 	if hp < 1 then
 		hp = 1
 	end
-	gui.play_flipbook(hp_display, "hp_"..tostring(hp))
+	gui.play_flipbook(hp_display, "hp_" .. tostring(hp))
 end
 
 function on_message(self, message_id, message, sender)
@@ -102,7 +94,7 @@ function on_message(self, message_id, message, sender)
 			-- dialogue starts from left line
 			self.dialogue = dialogues[message.dialogue_id]
 			if message.dialogue_id == 6 then
-				end_game = true
+				shared_table.alter_value(shared_table.GAME_END, true)
 			end
 			local char_right = gui.get_node("char_right")
 			if message.dialogue_id > 1 and message.dialogue_id < 6 then

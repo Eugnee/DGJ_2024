@@ -1,13 +1,23 @@
-shared_table = require "main.shared_table"
+local shared_table = require "main.shared_table"
 
 function init(self)
 	-- Add initialization code here
 	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
-	local score = shared_table.get_value(2)
+	local background = gui.get_node("background")
+	local score = shared_table.get_value(shared_table.HERO_JUNK_SCORE)
+	local hp = shared_table.get_value(shared_table.HERO_HP)
 	local junk_score_node = gui.get_node("junk_score")
-	local kills = shared_table.get_value(3)
+	local kills = shared_table.get_value(shared_table.HERO_KILLS_SCORE)
+	local junk_quota_noda = gui.get_node("junk_quota")
+	local limit = shared_table.get_value(shared_table.JUNK_QUOTA)
+	if hp < 0 or score < limit then
+		gui.play_flipbook(background, "gameover-youdied")
+	else
+		gui.play_flipbook(background, "gameover-yougotallthejunkandwon")
+	end
 	local enemy_score_node = gui.get_node("enemy_score")
-	gui.set_text(junk_score_node, "junk gathered: "..tostring(score))
-	gui.set_text(enemy_score_node, "enemies killed: "..tostring(kills))
+	gui.set_text(junk_score_node, "junk gathered: " .. tostring(score))
+	gui.set_text(enemy_score_node, "enemies killed: " .. tostring(kills))
+	gui.set_text(junk_quota_noda, "junk quota: " .. tostring(limit))
 end
