@@ -54,7 +54,7 @@ local dialogues = {
 }
 
 function init(self)
-	print("UI initialized")
+	
 	self.left_line = gui.get_node("text_left")
 	self.right_line = gui.get_node("text_right")
 	self.max_switches = 3
@@ -74,7 +74,7 @@ function animate_end()
 			msg.post(M.GAME_CONTROLLER, "load_level", { level = 'level_done' })
 		end
 	end
-	print("animate done")
+	
 end
 
 function update(self, dt)
@@ -157,6 +157,8 @@ end
 
 function on_input(self, action_id, action)
 	if self.block_input then
+		-- workaround
+		msg.post(M.GAME_CONTROLLER, hash("close_dialogue"))
 		return
 	end
 	if ((action_id == C.TALK or action_id == C.FIRE or action_id == hash("touch")) and action.pressed) then

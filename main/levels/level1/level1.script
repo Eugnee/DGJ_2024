@@ -5,7 +5,7 @@ go.property("hero_id", hash(""))
 local random = math.random
 
 function init(self)
-    print("loading leve1")
+    
 
     local enemy_creator = timer.delay(30, true, function()
         for i = 0, 3 do

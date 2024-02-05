@@ -53,7 +53,7 @@ end
 
 local function swap_backgrounds(self, dir, bg_level)
     if dir == vmath.vector3(0, 1, 0) then
-        print("swap forward background")
+        
         local bg_back_pos = go.get(self.bg_back[bg_level], "position")
         bg_back_pos.y = bg_back_pos.y + BG_Y_RANGE * 6
         go.set(self.bg_back[bg_level], "position", bg_back_pos)
@@ -62,7 +62,7 @@ local function swap_backgrounds(self, dir, bg_level)
         self.bg_middle[bg_level] = self.bg_front[bg_level]
         self.bg_front[bg_level] = bg_back
     elseif dir == vmath.vector3(0, -1, 0) then
-        print("swap backward background")
+        
         local bg_front_pos = go.get(self.bg_front[bg_level], "position")
         bg_front_pos.y = bg_front_pos.y - BG_Y_RANGE * 6
         go.set(self.bg_front[bg_level], "position", bg_front_pos)
@@ -89,7 +89,7 @@ function init(self)
         "bounds",
         { left = -MAP_WIDTH / 2, right = MAP_WIDTH / 2, bottom = -MAP_HEIGHT, top = MAP_HEIGHT * 10 }
     )
-    print("loading base")
+    
     init_backgrounds(self)
 
     -- passing all information on start from base to other leve here

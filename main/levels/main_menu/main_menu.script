@@ -3,6 +3,6 @@ function init(self)
 	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
 	self.id = 'main_menu scene'
-	print(self.id .. " scene initialized")
+	
 	msg.post(".", "acquire_input_focus")
 end

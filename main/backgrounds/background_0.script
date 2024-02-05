@@ -5,7 +5,6 @@ go.property("hero_id", hash(""))
 -- debugger.start()
 
 function init(self)
-	print("Background 0 created!")
 	self.parallax_speed = 5
 	self.parallax_move = vmath.vector3(0, 0, 0)
 end

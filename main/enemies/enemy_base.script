@@ -172,7 +172,6 @@ function on_message(self, message_id, message, sender)
     elseif message_id == M.CONTACT_POINT_RESPONSE then
         Position.correct_position(self, message)
     elseif message_id == M.MAKE_DAMAGE then
-        pprint("getting damage")
         get_damage(self, message.hp)
     end
 end
