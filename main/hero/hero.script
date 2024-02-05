@@ -97,6 +97,7 @@ local function take_damage(self, hp)
     end)
     msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_damaged", gate_time = 0.1 })
     if self.hp <= 0 then
+        msg.post(M.GAME_CONTROLLER, "load_level", { level = 'level_done' })
         -- msg.post("/main#main", M.GAME_OVER)
     end
 end
