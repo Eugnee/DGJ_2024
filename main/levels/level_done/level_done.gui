@@ -20,7 +20,7 @@ background_color {
 nodes {
   position {
     x: 480.0
-    y: 510.0
+    y: 490.0
     z: 0.0
     w: 1.0
   }
@@ -38,7 +38,7 @@ nodes {
   }
   size {
     x: 200.0
-    y: 100.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
@@ -116,7 +116,7 @@ nodes {
   }
   type: TYPE_BOX
   blend_mode: BLEND_MODE_ALPHA
-  texture: "ui/gameover"
+  texture: "ui/gameover-youdied"
   id: "background"
   xanchor: XANCHOR_NONE
   yanchor: YANCHOR_NONE
@@ -144,7 +144,7 @@ nodes {
 nodes {
   position {
     x: 480.0
-    y: 450.0
+    y: 430.0
     z: 0.0
     w: 1.0
   }
@@ -162,7 +162,7 @@ nodes {
   }
   size {
     x: 200.0
-    y: 100.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
@@ -210,7 +210,7 @@ nodes {
 nodes {
   position {
     x: 480.0
-    y: 480.0
+    y: 460.0
     z: 0.0
     w: 1.0
   }
@@ -228,7 +228,7 @@ nodes {
   }
   size {
     x: 200.0
-    y: 100.0
+    y: 30.0
     z: 0.0
     w: 1.0
   }
