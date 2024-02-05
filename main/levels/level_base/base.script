@@ -65,7 +65,7 @@ end
 
 function init(self)
     shared_table.add_value("hello")
-    math.randomseed(os.time())
+    math.randomseed(socket.gettime())
     self.hero_id = fabrics.create_hero()
     msg.post("camera", "follow", {
         target = self.hero_id,

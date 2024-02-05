@@ -38,7 +38,6 @@ end
 function toggle_dialogue_off(self)
 	msg.post("/ui", M.RELEASE_INPUT_FOCUS)
 	unpause_level(self)
-	-- msg.post("/ui", hash("toggle_dialogue"), { dialog_id = 123 })
 end
 
 function on_message(self, message_id, message, sender)

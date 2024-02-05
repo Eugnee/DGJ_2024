@@ -37,7 +37,7 @@ local end_dialogue = {
 }
 
 local dialogues = {
-	startup_dialogue, 
+	startup_dialogue,
 	pirate_dies0,
 	pirate_dies1,
 	pirate_dies2,
@@ -74,6 +74,7 @@ function on_message(self, message_id, message, sender)
 		if d_state == DIALOGUE_OFF then
 			local d_ui = gui.get_node("dialogue_ui")
 			gui.animate(d_ui, "position.y", 320, gui.EASING_OUTSINE, 1.5, 0, animate_end)
+			sound.play("#dialog_on")
 			d_state = DIALOGUE_OPENING
 			-- dialogue starts from left line
 			self.dialogue = dialogues[message.dialogue_id]
@@ -83,7 +84,7 @@ function on_message(self, message_id, message, sender)
 			local char_right = gui.get_node("char_right")
 			if message.dialogue_id > 1 and message.dialogue_id < 6 then
 				anim_id = message.dialogue_id - 1
-				gui.play_flipbook(char_right, "character_"..tostring(anim_id))
+				gui.play_flipbook(char_right, "character_" .. tostring(anim_id))
 			elseif message.dialogue_id == 1 then
 				gui.play_flipbook(char_right, "character_3")
 			end
@@ -103,6 +104,7 @@ function on_message(self, message_id, message, sender)
 			end
 		elseif d_state == DIALOGUE_ON then
 			local d_ui = gui.get_node("dialogue_ui")
+			sound.play("#dialog_off")
 			gui.animate(d_ui, "position.y", 120, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			d_state = DIALOGUE_CLOSING
 			msg.post(M.GAME_CONTROLLER, hash("close_dialogue"))
@@ -129,7 +131,8 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
-	if action_id == C.TALK and action.pressed then
+	if ((action_id == C.TALK or action_id == C.FIRE or action_id == hash("touch")) and action.pressed) then
 		msg.post(".", "next_line")
 	end
+	return true
 end

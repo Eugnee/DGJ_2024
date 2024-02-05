@@ -225,15 +225,7 @@ end
 ---@param action_id hash
 ---@param action {pressed: bool, x: number, y: number}
 function on_input(self, action_id, action)
-    if action.pressed then
-        -- actions only if pressed
-        -- dialogue
-        if action_id == C.TALK then
-            -- should be toggled by level logic, not here
-            msg.post(M.GAME_CONTROLLER, "toggle_dialogue")
-        end
-        -- movement
-    elseif action_id == C.LEFT then
+    if action_id == C.LEFT then
         self.is_moved = true
         self.direction.x = 1
     elseif action_id == C.RIGHT then
