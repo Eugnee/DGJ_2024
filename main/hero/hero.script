@@ -101,6 +101,14 @@ local function take_damage(self, hp)
     end
 end
 
+function increase_hp(self, hp)
+    local new_hp = self.hp + hp
+    if new_hp > 500 then
+        new_hp = 500
+    end
+    set_hp(self, new_hp)
+end
+
 ---@param self Hero
 local function spawn_bullet(self)
     local pos = go.get_position()
@@ -254,5 +262,7 @@ function on_message(self, message_id, message, sender)
     elseif message_id == M.SCORE then
         self.player_score = self.player_score + message.score
         shared_table.alter_value(shared_table.HERO_JUNK_SCORE, self.player_score)
+    elseif message_id == M.INCREASE_HP then
+        increase_hp(self, message.hp)
     end
 end

@@ -1,6 +1,6 @@
 components {
   id: "junk"
-  component: "/main/junk/junk.script"
+  component: "/main/objects/junk/junk.script"
   position {
     x: 0.0
     y: 0.0
@@ -16,7 +16,7 @@ components {
 embedded_components {
   id: "junk_sprite"
   type: "sprite"
-  data: "tile_set: \"/main/junk/junk.tilesource\"\n"
+  data: "tile_set: \"/main/objects/junk/junk.tilesource\"\n"
   "default_animation: \"1\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"

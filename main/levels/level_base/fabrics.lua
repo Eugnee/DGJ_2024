@@ -46,4 +46,8 @@ function Fabrics.create_meteor(position)
     return factory.create("/base/factories#meteor", position)
 end
 
+function Fabrics.create_medkit(position)
+    return factory.create("/base/factories#medkit", position)
+end
+
 return Fabrics

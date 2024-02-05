@@ -5,9 +5,7 @@ go.property("hero_id", hash(""))
 local random = math.random
 
 function init(self)
-    
-
-    local enemy_creator = timer.delay(30, true, function()
+    local enemy_creator = timer.delay(45, true, function()
         for i = 0, 3 do
             local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
             fabrics.create_pirat(self.hero_id, pos, i + 2)
@@ -18,10 +16,17 @@ function init(self)
         timer.trigger(enemy_creator)
     end)
 
-    timer.delay(60, true, function()
+    timer.delay(75, true, function()
         for i = 0, random(2) do
             local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
             fabrics.create_alien(self.hero_id, pos, i + 2)
+        end
+    end)
+
+    timer.delay(15, true, function()
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
+        for i = 0, random(2) do
+            fabrics.create_medkit(pos)
         end
     end)
 

@@ -39,7 +39,9 @@ M.SOUND_GATE = "/base/sounds#sound_gate"
 M.PLAY_SOUND = hash("play_gated_sound")
 
 -- INPUT
-M.ACQUIRE_INPUT_FOCUS = "acquire_input_focus"
-M.RELEASE_INPUT_FOCUS = "release_input_focus"
+M.ACQUIRE_INPUT_FOCUS = hash("acquire_input_focus")
+M.RELEASE_INPUT_FOCUS = hash("release_input_focus")
+
+M.INCREASE_HP = hash("increase_hp")
 
 return M

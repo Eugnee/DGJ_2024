@@ -1,6 +1,6 @@
 components {
-  id: "meteor1"
-  component: "/main/meteor/meteor.script"
+  id: "medkit"
+  component: "/main/objects/medkit/medkit.script"
   position {
     x: 0.0
     y: 0.0
@@ -14,10 +14,10 @@ components {
   }
 }
 embedded_components {
-  id: "meteor"
+  id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/meteor/meteor.tilesource\"\n"
-  "default_animation: \"meteor\"\n"
+  data: "tile_set: \"/main/objects/medkit/medkit.tilesource\"\n"
+  "default_animation: \"anim\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
@@ -34,22 +34,21 @@ embedded_components {
   }
 }
 embedded_components {
-  id: "meteorcollisionobject"
+  id: "collisionobject"
   type: "collisionobject"
   data: "collision_shape: \"\"\n"
   "type: COLLISION_OBJECT_TYPE_TRIGGER\n"
   "mass: 0.0\n"
   "friction: 0.1\n"
   "restitution: 0.5\n"
-  "group: \"meteor\"\n"
+  "group: \"med\"\n"
   "mask: \"hero\"\n"
-  "mask: \"enemy\"\n"
   "embedded_collision_shape {\n"
   "  shapes {\n"
-  "    shape_type: TYPE_BOX\n"
+  "    shape_type: TYPE_SPHERE\n"
   "    position {\n"
   "      x: 0.0\n"
-  "      y: -10.0\n"
+  "      y: 0.0\n"
   "      z: 0.0\n"
   "    }\n"
   "    rotation {\n"
@@ -59,11 +58,9 @@ embedded_components {
   "      w: 1.0\n"
   "    }\n"
   "    index: 0\n"
-  "    count: 3\n"
+  "    count: 1\n"
   "  }\n"
-  "  data: 8.0\n"
-  "  data: 16.0\n"
-  "  data: 10.0\n"
+  "  data: 15.0\n"
   "}\n"
   "linear_damping: 0.0\n"
   "angular_damping: 0.0\n"

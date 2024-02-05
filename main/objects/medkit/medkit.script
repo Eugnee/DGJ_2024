@@ -1,0 +1,8 @@
+go.property("hp", 50)
+
+function on_message(self, message_id, message, sender)
+    if message_id == M.TRIGGER_RESPONSE then
+        msg.post(message.other_id, M.INCREASE_HP, { hp = self.hp })
+        go.delete()
+    end
+end

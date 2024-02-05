@@ -11,7 +11,7 @@ local shared_table = require "main.shared_table"
 -- debugger.start()
 
 local startup_dialogue = {
-	"I must inform you to use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
+	"Your mission is to get all the junk. Use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
 	"Yeah.. You tell me this everyday. I know the drill."
 }
 
