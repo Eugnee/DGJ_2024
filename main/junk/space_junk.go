@@ -16,8 +16,8 @@ components {
 embedded_components {
   id: "junk_sprite"
   type: "sprite"
-  data: "tile_set: \"/main/junk/junk_atlas.atlas\"\n"
-  "default_animation: \"junk0\"\n"
+  data: "tile_set: \"/main/junk/junk.tilesource\"\n"
+  "default_animation: \"1\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
   ""
