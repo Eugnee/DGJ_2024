@@ -2,51 +2,57 @@ local fabrics = require "main.levels.level_base.fabrics"
 
 go.property("hero_id", hash(""))
 
+local random = math.random
+
 function init(self)
     print("loading leve1")
-    
-    local enemy_creator = timer.delay(30, true, function ()
-            for i = 0, 3 do
-                local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(300, 600), math.random(300, 600), 0)
-                fabrics.create_pirat(self.hero_id, pos, i + 2)
-            end
+
+    local enemy_creator = timer.delay(30, true, function()
+        for i = 0, 3 do
+            local pos = go.get_position(self.hero_id) + vmath.vector3(random(300, 600), random(300, 600), 0)
+            fabrics.create_pirat(self.hero_id, pos, i + 2)
         end
+    end
     )
-    timer.delay(5, false, function ()
+    timer.delay(5, false, function()
         timer.trigger(enemy_creator)
     end)
 
     -- first batch close
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0)
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0)
         fabrics.create_junk(self.hero_id, pos)
     end
     local junk_offset = vmath.vector3(0, 500, 0)
-    
+
     -- next batch further
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
     junk_offset.y = 1400
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
     junk_offset.y = 3600
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
     junk_offset.y = 4000
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
@@ -54,7 +60,8 @@ function init(self)
     junk_offset.y = 4800
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
@@ -62,14 +69,16 @@ function init(self)
     junk_offset.y = 7600
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
     junk_offset.y = 8400
     -- so on...
     for i = 0, 10 do
-        local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-200, 200), math.random(30, 1000), 0) + junk_offset
+        local pos = go.get_position(self.hero_id) + vmath.vector3(random(-200, 200), random(30, 1000), 0) +
+            junk_offset
         fabrics.create_junk(self.hero_id, pos)
     end
 
@@ -78,24 +87,22 @@ function init(self)
 
     -- randomly create meteor
     local meteor_creator = timer.delay(
-        10, 
-        true, 
-        function ()
-            for i = 0, 2 do
-                local pos = go.get_position(self.hero_id) + vmath.vector3(math.random(-480, 480), math.random(330, 400), 0)
+        10,
+        true,
+        function()
+            for i = 0, random(4) do
+                local pos = go.get_position(self.hero_id) +
+                    vmath.vector3(random(-480, 480), random(500, 700), 0)
                 fabrics.create_meteor(pos)
             end
         end
     )
-    
+
     timer.delay(
-        5, 
-        false, 
-        function ()
+        5,
+        false,
+        function()
             timer.trigger(meteor_creator)
         end
     )
 end
-
-
-

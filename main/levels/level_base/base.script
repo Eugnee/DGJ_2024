@@ -9,6 +9,16 @@ shared_table = require "main.shared_table"
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
+
+---@param pos vector3
+---@return bool
+function check_if_in_bounds(pos)
+    if math.abs(pos.x) >= MAP_WIDTH / 2 then
+        return false
+    end
+    return true
+end
+
 ---@param self any
 local function init_backgrounds(self)
     self.bg_middle = {
