@@ -5,9 +5,12 @@ function init(self)
 	-- Learn more: https://defold.com/manuals/script/
 	-- Remove this function if not needed
 	msg.post(".", "acquire_input_focus")
-	print("level done loaded!")
+
 	timer.delay(5, false, function()
 		msg.post(M.GAME_CONTROLLER, 'load_level', { level = 'level1' })
+		shared_table.alter_value(2, 0)
+		shared_table.alter_value(3, 0)
+		shared_table.alter_value(4, 500)
 	end)
 end
 

@@ -12,6 +12,7 @@ shared_table = require "main.shared_table"
 -- debugger.start()
 
 shared_table.alter_value(2, 0)
+shared_table.alter_value(3, 0)
 shared_table.alter_value(4, 500)
 
 local startup_dialogue = {
