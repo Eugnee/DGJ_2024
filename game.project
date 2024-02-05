@@ -19,10 +19,18 @@ dependencies#1 = https://github.com/rgrams/debug-draw/archive/master.zip
 
 [physics]
 debug = 0
+max_collision_object_count = 256
 
 [tilemap]
 max_tile_count = 4096
 
 [sprite]
 max_count = 1024
+
+[collectionfactory]
+max_count = 512
+
+[graphics]
+default_texture_min_filter = nearest
+default_texture_mag_filter = nearest
 
