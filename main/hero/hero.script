@@ -65,6 +65,7 @@ function init(self)
     shared_table.add_value(self.direction)
     shared_table.add_value(0)
     shared_table.add_value(0)
+    shared_table.add_value(500)
     self.engine_sound_file = msg.url("/base/sounds#hero_engine")
     sound.set_gain(self.engine_sound_file, 0)
     sound.play(self.engine_sound_file)
@@ -79,6 +80,7 @@ local function set_hp(self, hp)
     self.hp = hp
     -- msg.post("/gui#ingame", M.CHANGE_HP_BAR, { hp = hp, max_hp = self.max_hp })
     print("HP: ", hp)
+    shared_table.alter_value(4, self.hp)
 end
 
 local function take_damage(self, hp)

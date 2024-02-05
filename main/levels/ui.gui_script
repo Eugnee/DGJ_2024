@@ -7,6 +7,10 @@ local left_line = true
 local end_game = false
 local hero_id = "level1:/instance0"
 
+shared_table = require "main.shared_table"
+-- local debugger = require('debugger.debugger')
+-- debugger.start()
+
 local startup_dialogue = {
 	"I must inform you to use WASD or Arrows for movement, T to communicate and space for shooting. Get the junk, sell it and be happy with yourself",
 	"Yeah.. You tell me this everyday. I know the drill."
@@ -67,6 +71,22 @@ function animate_end()
 		end
 	end
 	print("animate done")
+end
+
+function update(self, dt)
+	local junk_score = gui.get_node("junk_score")
+	local score = shared_table.get_value(2)
+	gui.set_text(junk_score, tostring(score))
+
+
+	local hp_display = gui.get_node("hp_display")
+	local hp = shared_table.get_value(4)
+	hp = hp / 50 + 1
+	print(hp)
+	if hp < 1 then
+		hp = 1
+	end
+	gui.play_flipbook(hp_display, "hp_"..tostring(hp))
 end
 
 function on_message(self, message_id, message, sender)

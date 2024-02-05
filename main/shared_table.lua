@@ -8,6 +8,7 @@ local T = {}
 -- idx 1 == hero.direction
 -- idx 2 == hero.player_score
 -- idx 3 == hero.enemies_killed
+-- idx 4 == hero.hp
 local shared = {}
 
 function T.alter_value(idx, value)
