@@ -44,4 +44,6 @@ M.RELEASE_INPUT_FOCUS = hash("release_input_focus")
 
 M.INCREASE_HP = hash("increase_hp")
 
+-- BACKGROUND POSITION UPDATE
+M.BACKGROUND_POSITION_UPDATE = hash("bg_update")
 return M

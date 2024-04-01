@@ -9,6 +9,7 @@ local T = {}
 -- idx 2 == hero.player_score
 -- idx 3 == hero.enemies_killed
 -- idx 4 == hero.hp
+-- idx 5 == static background id
 local shared = {}
 
 function T.alter_value(idx, value)
@@ -29,6 +30,7 @@ T.HERO_KILLS_SCORE = 3
 T.HERO_HP = 4
 T.JUNK_QUOTA = 5
 T.GAME_END = 6
+T.CURR_STATIC_BG_NAME = 7
 
 T.add_value(vmath.vector4())
 T.add_value(0)
@@ -36,5 +38,6 @@ T.add_value(0)
 T.add_value(500)
 T.add_value(0)
 T.add_value(false)
+T.add_value("invalid")
 
 return T

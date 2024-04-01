@@ -140,6 +140,11 @@ local function simple_inertia(self, dt)
             local direction = vmath.rotate(rotation, DIRECTION_VEC)
             pos = pos + direction
             Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
+            msg.post(
+                shared_table.get_value(shared_table.CURR_STATIC_BG_NAME),
+                M.BACKGROUND_POSITION_UPDATE,
+                { player_pos = pos }
+            )
         end
         self.inertia_count = self.inertia_count + 0.05
         return
@@ -190,6 +195,11 @@ function update(self, dt)
             pos = pos + direction
             if check_if_in_bounds(pos) then
                 Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
+                msg.post(
+                    shared_table.get_value(shared_table.CURR_STATIC_BG_NAME),
+                    M.BACKGROUND_POSITION_UPDATE,
+                    { player_pos = pos }
+                )
             end
             self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
         else

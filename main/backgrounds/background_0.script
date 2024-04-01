@@ -4,6 +4,8 @@ go.property("hero_id", hash(""))
 -- local debugger = require('debugger.debugger')
 -- debugger.start()
 
+local shared_table = require "main.shared_table"
+
 function init(self)
 	self.parallax_speed = 5
 	self.parallax_move = vmath.vector3(0, 0, 0)
@@ -12,17 +14,29 @@ end
 local test_shared = true
 local shared_table = require "main.shared_table"
 
-function update(self, dt)
-	local pos = go.get_position(self.camera_id)
-	local dir = vmath.vector3(0, -1, 0)
-	local test_dir = vmath.vector3(0, 1, 0)
-	local player_quat = shared_table.get_value(shared_table.HERO_ROTATION)
+-- function update(self, dt)
+-- 	local pos = go.get_position(self.hero_id)
+-- 	pos.x = 0
+-- 	pos.z = 0
+-- 	-- local dir = vmath.vector3(0, -1, 0)
+-- 	-- local test_dir = vmath.vector3(0, 1, 0)
+-- 	-- local player_quat = shared_table.get_value(shared_table.HERO_ROTATION)
 
-	test_dir = vmath.rotate(player_quat, test_dir)
-	if test_dir.y < 0 then
-		dir.y = 1
-	end 
-	self.parallax_move = self.parallax_move + dir * dt * self.parallax_speed
-	pos = pos + self.parallax_move
-	go.set_position(pos)
+-- 	-- test_dir = vmath.rotate(player_quat, test_dir)
+-- 	-- if test_dir.y < 0 then
+-- 	-- 	dir.y = 1
+-- 	-- end 
+-- 	-- self.parallax_move = self.parallax_move + dir * dt * self.parallax_speed
+-- 	-- pos = pos + self.parallax_move
+-- 	go.set_position(pos)
+-- end
+
+function on_message(self, message_id, message, sender)
+    if message_id == M.BACKGROUND_POSITION_UPDATE then
+		-- TODO : add parallax!
+		local pos = message.player_pos
+		pos.x = 0
+		pos.z = 0
+		go.set_position(pos)
+    end
 end

@@ -36,7 +36,7 @@ local function init_backgrounds(self)
         factory.create("factories#background_factory2", vmath.vector3(0, -BG_Y_RANGE * 2, 0)),
         factory.create("factories#background_factory3", vmath.vector3(0, -BG_Y_RANGE * 2, 0))
     }
-
+    
     local camera_id = go.get_id("camera")
     local hero_id = self.hero_id
 
@@ -48,6 +48,10 @@ local function init_backgrounds(self)
             camera_id = camera_id,
             hero_id = hero_id
         }
+    )
+    shared_table.alter_value(
+        shared_table.CURR_STATIC_BG_NAME,
+        self.bg_static
     )
 end
 
