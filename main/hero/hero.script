@@ -4,11 +4,17 @@ go.property("damage", 50)
 go.property("bullet_speed", 900)
 go.property("bullet_url", msg.url())
 go.property("explosion_url", msg.url())
-go.property("angular_velocity", 2)
+
+go.property("angular_speedup", 2)
+go.property("angular_max_speed", 2)
+
+go.property("forward_speedup", 200)
+go.property("forward_max_speed", 200)
+
 go.property("player_score", 0)
 
--- local debugger = require('debugger.debugger')
--- debugger.start()
+local debugger = require('debugger.debugger')
+debugger.start()
 
 local shared_table = require "main.shared_table"
 
@@ -59,12 +65,18 @@ function init(self)
     self.locked_anim = false
     self.max_hp = self.hp
     self.is_moved = false
-    self.acceleration_count = self.speed / 10
-    self.inertia_acceleration = self.acceleration_count
-    self.inertia_count = self.speed
 
-    self.run_front_inertia = false
-    self.run_side_inertia = false
+
+    self.front_velocity = vmath.vector3()
+	self.front_last_movement = vmath.vector3()
+	self.front_acceleration = vmath.vector3()
+	self.front_acc_inverted = false
+
+    self.side_velocity = vmath.vector3()
+	self.side_last_movement = vmath.vector3()
+	self.side_acceleration = vmath.vector3()
+	self.side_acc_inverted = false
+    
     shared_table.alter_value(1, go.get_rotation())
     self.engine_sound_file = msg.url("/base/sounds#hero_engine")
     sound.set_gain(self.engine_sound_file, 0)
@@ -148,18 +160,6 @@ end
 
 ---@param self Hero
 ---@param dt float
-local function simple_inertia(self, dt)
-    -- if self.inertia_count == 0.9 then
-    --     msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_stab" })
-    -- end
-    if self.run_side_inertia then
-        rotate_side(self, dt, self.angular_velocity * (self.inertia_direction.x / self.inertia_count / self.inertia_acceleration))
-    end
-    if self.run_front_inertia then
-        move_front(self, dt, (self.speed / self.inertia_count / self.inertia_acceleration))
-    end
-    self.inertia_count = self.inertia_count + 0.05
-end
 
 local game_ended = false
 
@@ -168,68 +168,109 @@ local game_ended = false
 function update(self, dt)
     local rotation = go.get_rotation()
     shared_table.alter_value(shared_table.HERO_ROTATION, rotation)
-    if self.is_moved then
-        local pos = go.get_position()
-        if pos.y > 10000 and not game_ended then
-            -- level ended
-            msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"),
-                { dialogue_id = 6, max_switches = 1, hero_starts = true })
-            game_ended = true
-            return
-        end
-        if self.acceleration_count == self.speed / 10 then
-            -- if movement starts
-            msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_start" })
-        end
-        if self.direction.x ~= 0 then
-            if self.direction.x > 0 then
-                msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
-                msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.ENABLE)
-            else
-                msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
-                msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.ENABLE)
-            end
-            self.run_side_inertia = false
-            rotate_side(self, dt, self.angular_velocity * (self.direction.x / self.acceleration_count))
-            self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
-            self.inertia_direction.x = self.direction.x
+    local pos = go.get_position()
+    if pos.y > 10000 and not game_ended then
+        -- level ended
+        msg.post(M.GAME_CONTROLLER, hash("toggle_dialogue"),
+            { dialogue_id = 6, max_switches = 1, hero_starts = true })
+        game_ended = true
+        return
+    end
+    if self.acceleration_count == self.speed / 10 then
+        -- if movement starts
+        msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_start" })
+    end
+    if self.direction.x ~= 0 then
+        if self.direction.x > 0 then
+            msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
+            msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.ENABLE)
         else
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
-            msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
-            self.run_side_inertia = true
+            msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.ENABLE)
         end
-        if self.direction.y ~= 0 then
-            self.run_front_inertia = false
-            msg.post(C.SPRITE_FIRE_FRONT, M.ENABLE)
-            move_front(self, dt, (self.speed / self.acceleration_count))
-            self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
-            self.inertia_direction.y = self.direction.y
-        else
-            self.run_front_inertia = true
-            msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
-        end
-        self.inertia_count = 0.9
-        self.inertia_acceleration = self.acceleration_count
-        if not self.engine_sound then
-            self.engine_sound = true
-            sound.set_gain(self.engine_sound_file, 0.5)
-        end
-        -- msg.post(M.SOUND_GATE, M.PLAY_SOUND, { gate_time = 4.5, sound = "/base/sounds#hero_engine" })
     else
-        self.run_front_inertia = true
-        self.run_side_inertia = true
-        self.acceleration_count = self.speed / 10
-        if self.engine_sound then
-            self.engine_sound = false
-            sound.set_gain("/base/sounds#hero_engine", 0)
-        end
+        msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
+        msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
     end
+    if self.direction.y ~= 0 then
+        msg.post(C.SPRITE_FIRE_FRONT, M.ENABLE)
+    else
+        msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
+    end
+
+    if not self.engine_sound then
+        self.engine_sound = true
+        sound.set_gain(self.engine_sound_file, 0.5)
+    end
+    -- msg.post(M.SOUND_GATE, M.PLAY_SOUND, { gate_time = 4.5, sound = "/base/sounds#hero_engine" })
+    if self.engine_sound then
+        self.engine_sound = false
+        sound.set_gain("/base/sounds#hero_engine", 0)
+    end
+    -- end
     if self.attacking then
         Animate.play_animation(self, C.SPRITE, ATTACK_ANIM, false, spawn_bullet)
     end
     -- anim = Animate.get_anim_name_by_direction("hero", vmath.normalize(self.cursor_pos - pos))
 
-    simple_inertia(self, dt)
+    local input = vmath.vector3()
+    input.y = self.direction.y
+
+    -- forward movement
+	if self.is_moved then
+		self.front_acceleration = input * self.forward_speedup
+		self.front_acc_inverted = false
+		self.front_last_input_velocity = self.front_velocity
+	elseif not self.front_acc_inverted then 
+		self.front_acceleration = -self.front_acceleration
+		self.front_acc_inverted = true
+	elseif vmath.length(self.front_last_movement) <= 0.1 then
+		self.front_velocity = vmath.vector3()
+		self.front_acceleration = vmath.vector3()
+	end
+	
+	local dv = self.front_acceleration * dt
+	local v0 = self.front_velocity
+	local v1 = self.front_velocity + dv
+	local movement = (v0 + v1) * 0.5
+	self.front_last_movement = movement
+    local fw_speed = vmath.length(movement)
+    if fw_speed > self.forward_max_speed then
+        fw_speed = self.forward_max_speed
+    end
+	move_front(self, dt, fw_speed)
+	self.front_velocity = v1
+
+    -- use input as buffer
+    input = self.direction
+    input.y = 0
+
+    -- backward movement
+    if self.is_moved then
+		self.side_acceleration = input * self.angular_speedup
+		self.side_acc_inverted = false
+		self.side_last_input_velocity = self.side_velocity
+	elseif not self.side_acc_inverted then 
+		self.side_acceleration = -self.side_acceleration
+		self.side_acc_inverted = true
+	elseif vmath.length(self.side_last_movement) <= 0.1 then
+		self.side_velocity = vmath.vector3()
+		self.side_acceleration = vmath.vector3()
+	end
+	
+	local sdv = self.side_acceleration * dt
+	local sv0 = self.side_velocity
+	local sv1 = self.side_velocity + sdv
+	local smovement = (sv0 + sv1) * 0.5
+	self.side_last_movement = smovement
+    local sd_speed = vmath.length(smovement) * input.x
+    if sd_speed > self.angular_max_speed then
+        sd_speed = self.angular_max_speed
+    end
+	rotate_side(self, dt, sd_speed)
+	self.side_velocity = sv1
+
+
     self.direction.x = 0
     self.direction.y = 0
     self.correction.x = 0
