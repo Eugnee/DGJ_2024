@@ -62,6 +62,9 @@ function init(self)
     self.acceleration_count = self.speed / 10
     self.inertia_acceleration = self.acceleration_count
     self.inertia_count = self.speed
+
+    self.run_front_inertia = false
+    self.run_side_inertia = false
     shared_table.alter_value(1, go.get_rotation())
     self.engine_sound_file = msg.url("/base/sounds#hero_engine")
     sound.set_gain(self.engine_sound_file, 0)
@@ -120,35 +123,42 @@ local function spawn_bullet(self)
     self.current_anim = nil
 end
 
+local function move_front(self, dt, speed)
+    local distance = speed * dt
+    DIRECTION_VEC.y = distance
+    local rotation = go.get_rotation()
+    local direction = vmath.rotate(rotation, DIRECTION_VEC)
+    local pos = go.get_position()
+    pos = pos + direction
+    if check_if_in_bounds(pos) then
+        Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
+        msg.post(
+            shared_table.get_value(shared_table.CURR_STATIC_BG_NAME),
+            M.BACKGROUND_POSITION_UPDATE,
+            { player_pos = pos }
+        )
+    end
+end
+
+local function rotate_side(self, dt, angular_velocity)
+    local rotation = go.get_rotation()
+    rotation = rotation * vmath.quat_rotation_z(angular_velocity * dt)
+    go.set_rotation(rotation)
+end
+
 ---@param self Hero
 ---@param dt float
 local function simple_inertia(self, dt)
-    if self.inertia_count < self.speed then
-        if self.inertia_count == 0.9 then
-            msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_stab" })
-        end
-        local rotation = go.get_rotation()
-        if self.inertia_direction.x ~= 0 then
-            local ang = self.inertia_direction.x * dt / self.inertia_count / self.inertia_acceleration
-            rotation = rotation * vmath.quat_rotation_z(self.angular_velocity * ang)
-            go.set_rotation(rotation)
-        end
-        if self.inertia_direction.y ~= 0 then
-            local distance = self.speed / self.inertia_count / self.inertia_acceleration * dt
-            local pos = go.get_position()
-            DIRECTION_VEC.y = distance
-            local direction = vmath.rotate(rotation, DIRECTION_VEC)
-            pos = pos + direction
-            Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
-            msg.post(
-                shared_table.get_value(shared_table.CURR_STATIC_BG_NAME),
-                M.BACKGROUND_POSITION_UPDATE,
-                { player_pos = pos }
-            )
-        end
-        self.inertia_count = self.inertia_count + 0.05
-        return
+    -- if self.inertia_count == 0.9 then
+    --     msg.post(M.SOUND_GATE, M.PLAY_SOUND, { sound = "/base/sounds#hero_engine_stab" })
+    -- end
+    if self.run_side_inertia then
+        rotate_side(self, dt, self.angular_velocity * (self.inertia_direction.x / self.inertia_count / self.inertia_acceleration))
     end
+    if self.run_front_inertia then
+        move_front(self, dt, (self.speed / self.inertia_count / self.inertia_acceleration))
+    end
+    self.inertia_count = self.inertia_count + 0.05
 end
 
 local game_ended = false
@@ -179,51 +189,36 @@ function update(self, dt)
                 msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
                 msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.ENABLE)
             end
-            rotation = rotation *
-                vmath.quat_rotation_z(self.angular_velocity * self.direction.x * dt / self.acceleration_count)
-            go.set_rotation(rotation)
+            self.run_side_inertia = false
+            rotate_side(self, dt, self.angular_velocity * (self.direction.x / self.acceleration_count))
             self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
+            self.inertia_direction.x = self.direction.x
         else
             msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
             msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
+            self.run_side_inertia = true
         end
         if self.direction.y ~= 0 then
+            self.run_front_inertia = false
             msg.post(C.SPRITE_FIRE_FRONT, M.ENABLE)
-            local distance = (self.speed / self.acceleration_count) * dt
-            DIRECTION_VEC.y = distance
-            local direction = vmath.rotate(rotation, DIRECTION_VEC)
-            pos = pos + direction
-            if check_if_in_bounds(pos) then
-                Position.set_iso_position(pos, C.OBECTS_Z_INDEX)
-                msg.post(
-                    shared_table.get_value(shared_table.CURR_STATIC_BG_NAME),
-                    M.BACKGROUND_POSITION_UPDATE,
-                    { player_pos = pos }
-                )
-            end
+            move_front(self, dt, (self.speed / self.acceleration_count))
             self.acceleration_count = Utils.decrement(self.acceleration_count, 1, 1)
+            self.inertia_direction.y = self.direction.y
         else
+            self.run_front_inertia = true
             msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
         end
-        self.inertia_count = self.speed
-        self.run_inertia = true
+        self.inertia_count = 0.9
         self.inertia_acceleration = self.acceleration_count
-        self.inertia_direction.x = self.direction.x
-        self.inertia_direction.y = self.direction.y
         if not self.engine_sound then
             self.engine_sound = true
             sound.set_gain(self.engine_sound_file, 0.5)
         end
         -- msg.post(M.SOUND_GATE, M.PLAY_SOUND, { gate_time = 4.5, sound = "/base/sounds#hero_engine" })
     else
+        self.run_front_inertia = true
+        self.run_side_inertia = true
         self.acceleration_count = self.speed / 10
-        if self.run_inertia then
-            self.run_inertia = false
-            self.inertia_count = 0.9
-            msg.post(C.SPRITE_FIRE_FRONT, M.DISABLE)
-            msg.post(C.SPRITE_FIRE_SIDE_LEFT, M.DISABLE)
-            msg.post(C.SPRITE_FIRE_SIDE_RIGHT, M.DISABLE)
-        end
         if self.engine_sound then
             self.engine_sound = false
             sound.set_gain("/base/sounds#hero_engine", 0)
