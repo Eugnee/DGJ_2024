@@ -16,10 +16,13 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/hero/bullet.tilesource\"\n"
-  "default_animation: \"anim\"\n"
+  data: "default_animation: \"anim\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/bullet.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0
@@ -60,6 +63,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 17.0\n"
   "  data: 9.0\n"

@@ -45,6 +45,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 16.0\n"
   "  data: 16.0\n"
@@ -70,10 +71,13 @@ embedded_components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/hero/hero.tilesource\"\n"
-  "default_animation: \"idle\"\n"
+  data: "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/hero.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0
@@ -90,10 +94,13 @@ embedded_components {
 embedded_components {
   id: "fire_side_right"
   type: "sprite"
-  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
-  "default_animation: \"side-right\"\n"
+  data: "default_animation: \"side-right\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/hero_fire.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 1.0
@@ -110,10 +117,13 @@ embedded_components {
 embedded_components {
   id: "fire_front"
   type: "sprite"
-  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
-  "default_animation: \"up\"\n"
+  data: "default_animation: \"up\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/hero_fire.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0
@@ -130,10 +140,13 @@ embedded_components {
 embedded_components {
   id: "fire_side_left"
   type: "sprite"
-  data: "tile_set: \"/main/hero/hero_fire.tilesource\"\n"
-  "default_animation: \"side-left\"\n"
+  data: "default_animation: \"side-left\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/hero_fire.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: -2.0
@@ -150,10 +163,13 @@ embedded_components {
 embedded_components {
   id: "damaged"
   type: "sprite"
-  data: "tile_set: \"/main/hero/damage.tilesource\"\n"
-  "default_animation: \"damaged\"\n"
+  data: "default_animation: \"damaged\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/hero/damage.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0

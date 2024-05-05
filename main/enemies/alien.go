@@ -31,10 +31,13 @@ components {
 embedded_components {
   id: "sprite"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/alien.tilesource\"\n"
-  "default_animation: \"idle\"\n"
+  data: "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/enemies/alien.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0
@@ -77,6 +80,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 9.0\n"
   "  data: 21.0\n"
@@ -126,6 +130,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 1\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 115.0\n"
   "}\n"
@@ -149,10 +154,13 @@ embedded_components {
 embedded_components {
   id: "fire"
   type: "sprite"
-  data: "tile_set: \"/main/enemies/alien_fire.tilesource\"\n"
-  "default_animation: \"idle\"\n"
+  data: "default_animation: \"idle\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/enemies/alien_fire.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0

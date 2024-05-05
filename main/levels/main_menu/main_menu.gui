@@ -1,8 +1,4 @@
 script: "/main/levels/main_menu/main_menu.gui_script"
-fonts {
-  name: "system_font"
-  font: "/builtins/fonts/system_font.font"
-}
 textures {
   name: "ui"
   texture: "/main/levels/ui.atlas"

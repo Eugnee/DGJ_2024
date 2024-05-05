@@ -1,0 +1,62 @@
+-- some glogal things here
+C = require "main.constants"
+M = require "main.messages"
+
+math.randomseed(socket.gettime())
+function init(self)
+	msg.post(".", M.ACQUIRE_INPUT_FOCUS)
+	-- sound.play("/controller#main_theme")
+	self.current_level = nil
+	-- msg.post(".", "load_level", { level = "arena" })
+	msg.post(".", "load_level", { level = "main_menu_proxy" })
+	self.time = 0.0
+end
+
+function unload_level(self)
+	msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
+	msg.post('#' .. self.current_level, M.UNLOAD)
+end
+
+function load_level(self)
+	msg.post('#' .. self.current_level, M.LOAD)
+	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
+end
+
+function pause_level(self)
+	if self.current_level == nil then
+		print("self.current_level is nil!")
+		return
+	end
+	msg.post('#' .. self.current_level, "set_time_step", { factor = 0, mode = 0 })
+	msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
+end
+
+function unpause_level(self)
+	msg.post('#' .. self.current_level, "set_time_step", { factor = 1, mode = 1 })
+	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == M.PROXY_LOADED then
+		msg.post(sender, M.ENABLE)
+	elseif message_id == M.PROXY_UNLOADED then
+		load_level(self)
+	elseif message_id == hash("load_level") then
+		if self.current_level == nil then
+			self.current_level = message.level
+			load_level(self)
+		else
+			unload_level(self)
+			self.current_level = message.level
+			print("New loaded level:", self.current_level) 
+		end
+	end
+end
+
+function update(self, dt)
+	self.time = self.time + dt
+	if self.time >= 1 then
+		print("self.current_level:", self.current_level)
+		self.time = 0.0
+	end
+end

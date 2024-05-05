@@ -1,0 +1,22 @@
+-- some glogal things here
+C = require "main.constants"
+M = require "main.messages"
+
+function toggle_dialogue_on(self, params)
+	pause_level(self)
+	msg.post("/ui", hash("toggle_dialogue"), params)
+	msg.post("/ui", M.ACQUIRE_INPUT_FOCUS)
+end
+
+function toggle_dialogue_off(self)
+	msg.post("/ui", M.RELEASE_INPUT_FOCUS)
+	unpause_level(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("toggle_dialogue") then
+		toggle_dialogue_on(self, message)
+	elseif message_id == hash("close_dialogue") then
+		toggle_dialogue_off(self)
+	end
+end

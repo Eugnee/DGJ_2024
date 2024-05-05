@@ -6,7 +6,7 @@ go.property("bullet_url", msg.url())
 go.property("explosion_url", msg.url())
 
 go.property("angular_speedup", 2)
-go.property("angular_max_speed", 2)
+go.property("angular_max_speed", 10)
 
 go.property("forward_speedup", 200)
 go.property("forward_max_speed", 200)
@@ -76,7 +76,8 @@ function init(self)
 	self.side_last_movement = vmath.vector3()
 	self.side_acceleration = vmath.vector3()
 	self.side_acc_inverted = false
-    
+    self.last_side_sign = 1
+
     shared_table.alter_value(1, go.get_rotation())
     self.engine_sound_file = msg.url("/base/sounds#hero_engine")
     sound.set_gain(self.engine_sound_file, 0)
@@ -237,9 +238,11 @@ function update(self, dt)
     local fw_speed = vmath.length(movement)
     if fw_speed > self.forward_max_speed then
         fw_speed = self.forward_max_speed
+    else
+        -- accumulate velocity only if limit not reached
+        self.front_velocity = v1
     end
 	move_front(self, dt, fw_speed)
-	self.front_velocity = v1
 
     -- use input as buffer
     input = self.direction
@@ -247,6 +250,11 @@ function update(self, dt)
 
     -- backward movement
     if self.is_moved then
+        if self.last_side_sign ~= input.x then
+            self.side_velocity = vmath.vector3()
+            self.side_acceleration = vmath.vector3()
+        end
+        self.last_side_sign = input.x
 		self.side_acceleration = input * self.angular_speedup
 		self.side_acc_inverted = false
 		self.side_last_input_velocity = self.side_velocity
@@ -266,9 +274,11 @@ function update(self, dt)
     local sd_speed = vmath.length(smovement) * input.x
     if sd_speed > self.angular_max_speed then
         sd_speed = self.angular_max_speed
+    else
+        -- accumulate velocity only if limit not reached
+        self.side_velocity = sv1
     end
 	rotate_side(self, dt, sd_speed)
-	self.side_velocity = sv1
 
 
     self.direction.x = 0

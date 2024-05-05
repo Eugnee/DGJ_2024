@@ -16,10 +16,13 @@ components {
 embedded_components {
   id: "meteor"
   type: "sprite"
-  data: "tile_set: \"/main/objects/meteor/meteor.tilesource\"\n"
-  "default_animation: \"meteor\"\n"
+  data: "default_animation: \"meteor\"\n"
   "material: \"/builtins/materials/sprite.material\"\n"
   "blend_mode: BLEND_MODE_ALPHA\n"
+  "textures {\n"
+  "  sampler: \"texture_sampler\"\n"
+  "  texture: \"/main/objects/meteor/meteor.tilesource\"\n"
+  "}\n"
   ""
   position {
     x: 0.0
@@ -60,6 +63,7 @@ embedded_components {
   "    }\n"
   "    index: 0\n"
   "    count: 3\n"
+  "    id: \"\"\n"
   "  }\n"
   "  data: 8.0\n"
   "  data: 16.0\n"
