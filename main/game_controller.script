@@ -2,6 +2,9 @@
 C = require "main.constants"
 M = require "main.messages"
 
+
+GAME_STATE = {}
+
 math.randomseed(socket.gettime())
 function init(self)
 	msg.post(".", M.ACQUIRE_INPUT_FOCUS)
@@ -22,7 +25,7 @@ function load_level(self)
 	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
 end
 
-function pause_level(self)
+local function pause_level(self)
 	if self.current_level == nil then
 		print("self.current_level is nil!")
 		return
@@ -31,7 +34,7 @@ function pause_level(self)
 	msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
 end
 
-function unpause_level(self)
+local function unpause_level(self)
 	msg.post('#' .. self.current_level, "set_time_step", { factor = 1, mode = 1 })
 	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
 end
@@ -50,6 +53,11 @@ function on_message(self, message_id, message, sender)
 			self.current_level = message.level
 			print("New loaded level:", self.current_level) 
 		end
+		GAME_STATE["current_level"] = self.current_level
+	elseif message_id == hash("pause") then
+		pause_level(self)
+	elseif message_id == hash("unpause") then
+		unpause_level(self)
 	end
 end
 
