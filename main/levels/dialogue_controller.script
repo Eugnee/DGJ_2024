@@ -1,13 +1,13 @@
+local ui_url = msg.url("ui", "/ui", nil)
 
-function toggle_dialogue_on(self, params)
+local function toggle_dialogue_on(self, params)
 	msg.post(M.GAME_CONTROLLER, "pause")
-	local level_url = msg.url(GAME_STATE["current_level"], "/ui", "ui")
-	msg.post(level_url, hash("toggle_dialogue"), params)
-	msg.post(level_url, M.ACQUIRE_INPUT_FOCUS)
+	msg.post(ui_url, hash("toggle_dialogue"), params)
+	msg.post(ui_url, M.ACQUIRE_INPUT_FOCUS)
 end
 
-function toggle_dialogue_off(self)
-	msg.post("/ui", M.RELEASE_INPUT_FOCUS)
+local function toggle_dialogue_off(self)
+	msg.post(ui_url, M.RELEASE_INPUT_FOCUS)
 	msg.post(M.GAME_CONTROLLER, "unpause")
 end
 

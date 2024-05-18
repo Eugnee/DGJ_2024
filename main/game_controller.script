@@ -25,13 +25,17 @@ function load_level(self)
 	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
 end
 
+function load_ui()
+	msg.post('#' .. "ui", M.LOAD)
+end
+
 local function pause_level(self)
 	if self.current_level == nil then
 		print("self.current_level is nil!")
 		return
 	end
 	msg.post('#' .. self.current_level, "set_time_step", { factor = 0, mode = 0 })
-	msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
+	-- msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
 end
 
 local function unpause_level(self)
@@ -51,7 +55,10 @@ function on_message(self, message_id, message, sender)
 		else
 			unload_level(self)
 			self.current_level = message.level
-			print("New loaded level:", self.current_level) 
+			-- TODO: load UI only for speciefic levels
+			-- or send message about loading UI from level
+			load_ui()
+			print("New loaded level:", self.current_level)
 		end
 		GAME_STATE["current_level"] = self.current_level
 	elseif message_id == hash("pause") then
