@@ -35,7 +35,7 @@ local function pause_level(self)
 		return
 	end
 	msg.post('#' .. self.current_level, "set_time_step", { factor = 0, mode = 0 })
-	msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
+	-- msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
 end
 
 local function unpause_level(self)
@@ -45,18 +45,14 @@ end
 
 function on_message(self, message_id, message, sender)
 	if message_id == M.PROXY_LOADED then
-		print("level was loaded:", self.current_level)
 		msg.post(sender, M.ENABLE)
 	elseif message_id == M.PROXY_UNLOADED then
-		print("New loaded level:", self.current_level)
 		load_level(self)
 	elseif message_id == hash("load_level") then
 		if self.current_level == nil then
-			print("Current level was nil! We are trying to load level:", message.level)
 			self.current_level = message.level
 			load_level(self)
 		else
-			print("We are now trying to unload level:", self.current_level)
 			unload_level(self)
 			self.current_level = message.level
 			-- TODO: load UI only for speciefic levels
@@ -71,10 +67,10 @@ function on_message(self, message_id, message, sender)
 	end
 end
 
-function update(self, dt)
-	self.time = self.time + dt
-	if self.time >= 1 then
-		print("self.current_level:", self.current_level)
-		self.time = 0.0
-	end
-end
+-- function update(self, dt)
+-- 	self.time = self.time + dt
+-- 	if self.time >= 1 then
+-- 		print("self.current_level:", self.current_level)
+-- 		self.time = 0.0
+-- 	end
+-- end
