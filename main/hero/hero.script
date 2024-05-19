@@ -292,6 +292,10 @@ end
 ---@param action_id hash
 ---@param action {pressed: bool, x: number, y: number}
 function on_input(self, action_id, action)
+    if shared_table.get_value(shared_table.DISABLE_HERO_INPUT) then
+        return
+    end
+
     if action_id == C.LEFT then
         self.is_moved = true
         self.direction.x = 1
@@ -302,7 +306,8 @@ function on_input(self, action_id, action)
         self.is_moved = true
         self.direction.y = 1
     elseif
-        action_id == C.FIRE
+        action.pressed 
+        and action_id == C.FIRE
         and not self.attacking
     then
         self.attacking = true

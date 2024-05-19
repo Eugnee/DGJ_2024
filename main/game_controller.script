@@ -2,6 +2,7 @@
 C = require "main.constants"
 M = require "main.messages"
 
+local shared_table = require "main.shared_table"
 
 GAME_STATE = {}
 
@@ -35,12 +36,14 @@ local function pause_level(self)
 		return
 	end
 	msg.post('#' .. self.current_level, "set_time_step", { factor = 0, mode = 0 })
+	shared_table.alter_value(shared_table.DISABLE_HERO_INPUT, true)
 	-- msg.post('#' .. self.current_level, M.RELEASE_INPUT_FOCUS)
 end
 
 local function unpause_level(self)
 	msg.post('#' .. self.current_level, "set_time_step", { factor = 1, mode = 1 })
 	msg.post('#' .. self.current_level, M.ACQUIRE_INPUT_FOCUS)
+	shared_table.alter_value(shared_table.DISABLE_HERO_INPUT, false)
 end
 
 function on_message(self, message_id, message, sender)
