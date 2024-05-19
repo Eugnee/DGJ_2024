@@ -96,7 +96,7 @@ function init(self)
 
     -- level starts from dialogue
     -- suggestion is to have dialogue controller per level, as dialogue conditions may vary between levels a lot
-    msg.post(M.DIALOGUE_CONTROLLER, hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 2, hero_starts = false })
+    msg.post("ui:/level1_dialogue_controller", hash("toggle_dialogue"), { dialogue_id = 1, max_switches = 2, hero_starts = false })
 
     -- randomly create meteor
     local meteor_creator = timer.delay(
