@@ -1,9 +1,5 @@
 script: "/main/levels/ui.gui_script"
 fonts {
-  name: "system_font"
-  font: "/builtins/fonts/system_font.font"
-}
-fonts {
   name: "retro_gaming"
   font: "/fonts/retro_gaming.font"
 }

@@ -123,7 +123,7 @@ function on_message(self, message_id, message, sender)
 			sound.play("#dialog_off")
 			gui.animate(d_ui, "position.y", 120, gui.EASING_OUTSINE, 1.5, 0, animate_end)
 			d_state = DIALOGUE_CLOSING
-			msg.post(M.GAME_CONTROLLER, hash("close_dialogue"))
+			msg.post("ui:/level1_dialogue_controller", hash("close_dialogue"))
 		end
 	elseif message_id == hash("next_line") and d_state == DIALOGUE_ON then
 		if self.curr_switches >= self.max_switches then
@@ -148,9 +148,10 @@ function on_message(self, message_id, message, sender)
 end
 
 function on_input(self, action_id, action)
+	print("INPUT UI")
 	if self.block_input then
 		-- workaround
-		msg.post(M.GAME_CONTROLLER, hash("close_dialogue"))
+		msg.post("ui:/level1_dialogue_controller", hash("close_dialogue"))
 		return
 	end
 	if ((action_id == C.TALK or action_id == C.FIRE or action_id == hash("touch")) and action.pressed) then

@@ -34,7 +34,8 @@ M.UNLOAD = hash("unload")
 M.GAME_OVER = hash("game_over")
 M.RESTART = hash("restart")
 M.START_GAME = hash("start_game")
-M.GAME_CONTROLLER = msg.url("game:/levels#game_controller")
+M.GAME_CONTROLLER = msg.url("main:/controller#game_controller")
+M.DIALOGUE_CONTROLLER = msg.url("main:/dialogue_controller")
 M.SOUND_GATE = "/base/sounds#sound_gate"
 M.PLAY_SOUND = hash("play_gated_sound")
 

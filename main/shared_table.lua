@@ -31,6 +31,7 @@ T.HERO_HP = 4
 T.JUNK_QUOTA = 5
 T.GAME_END = 6
 T.CURR_STATIC_BG_NAME = 7
+T.DISABLE_HERO_INPUT = 8
 
 T.add_value(vmath.vector4())
 T.add_value(0)
@@ -39,5 +40,6 @@ T.add_value(500)
 T.add_value(0)
 T.add_value(false)
 T.add_value("invalid")
+T.add_value(false)
 
 return T
