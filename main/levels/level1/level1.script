@@ -13,7 +13,7 @@ function init(self)
     end
     )
     timer.delay(5, false, function()
-        timer.trigger(enemy_creator)
+       timer.trigger(enemy_creator)
     end)
 
     timer.delay(75, true, function()
